@@ -376,6 +376,41 @@
     </section>
 
     <section class="section">
+      <h2>Kuroco以外のサービス ベンチマーク</h2>
+      <p>Kuroco以外にも選択肢はあります。今回の用途では、会員サイト特化、認証・DB基盤、認証特化、CMS特化の4系統で比較するのが分かりやすいです。</p>
+      <table>
+        <thead>
+          <tr><th>サービス</th><th>得意領域</th><th>認証</th><th>CMS</th><th>課金</th><th>メール</th><th>適合度</th><th>コメント</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Kuroco</td><td>日本製ヘッドレスCMS + 会員管理</td><td>◎</td><td>◎</td><td>○</td><td>○</td><td>◎</td><td>既に検証済み。日本語運用しやすい。従量課金の見積もり管理が論点。</td></tr>
+          <tr><td>Outseta</td><td>会員サイト、CRM、課金、メール一体型</td><td>◎</td><td>△</td><td>◎</td><td>◎</td><td>◎</td><td>3つのボックスを最短で実装しやすい。Founder $37/月、1,000 contacts、課金手数料あり。</td></tr>
+          <tr><td>Memberstack</td><td>会員制サイト、Stripe課金</td><td>◎</td><td>△</td><td>◎</td><td>△</td><td>○</td><td>Webflow等との相性が良い。Basic $29/月、1,000 members、取引手数料あり。</td></tr>
+          <tr><td>Supabase</td><td>Auth + DB + Edge Functions</td><td>◎</td><td>△</td><td>△</td><td>×</td><td>◎</td><td>50,000 MAU無料枠が大きい。開発自由度が高い。CMS画面は別途必要。</td></tr>
+          <tr><td>Firebase</td><td>Auth + DB + Hosting</td><td>◎</td><td>△</td><td>△</td><td>×</td><td>○</td><td>Google系で安定。CMS・課金は別設計。</td></tr>
+          <tr><td>Clerk</td><td>認証UI・B2B認証・課金連携</td><td>◎</td><td>×</td><td>○</td><td>×</td><td>○</td><td>認証UIが強く実装が速い。アプリ開発前提なら有力。</td></tr>
+          <tr><td>Auth0</td><td>エンタープライズ認証</td><td>◎</td><td>×</td><td>×</td><td>×</td><td>△</td><td>認証は強いが、この案件にはやや重い。B2B/SSO重視なら候補。</td></tr>
+          <tr><td>Amazon Cognito</td><td>AWS認証基盤</td><td>◎</td><td>×</td><td>×</td><td>×</td><td>△</td><td>AWS前提なら低コスト。ただし設定・運用が難しめ。</td></tr>
+          <tr><td>microCMS</td><td>日本製ヘッドレスCMS</td><td>×</td><td>◎</td><td>×</td><td>×</td><td>○</td><td>記事CMSとしては有力。会員・課金はClerk等と組み合わせる。</td></tr>
+        </tbody>
+      </table>
+
+      <table>
+        <thead>
+          <tr><th>順位</th><th>構成</th><th>向いているケース</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>Kuroco + Resend + 静的HTML/軽量アプリ</td><td>既存検証を活かし、短期で無料ニュース配信を始める。</td></tr>
+          <tr><td>2</td><td>Outseta単体 + 静的ページ</td><td>会員管理、課金、メール、CRMを一体で素早く作る。</td></tr>
+          <tr><td>3</td><td>Supabase + microCMS + Resend</td><td>将来的に独自アプリやSCS診断DBをしっかり作り込む。</td></tr>
+          <tr><td>4</td><td>Clerk + microCMS + Stripe/Resend</td><td>認証UIと課金導線をきれいに作りたい。</td></tr>
+          <tr><td>5</td><td>Firebase + microCMS/独自CMS</td><td>Google系で低コストに始めたい。</td></tr>
+        </tbody>
+      </table>
+      <div class="callout">判断: 短期はKuroco継続。代替候補として、会員・課金・メール一体型のOutsetaと、独自アプリ開発に強いSupabaseを優先ベンチマーク対象にする。</div>
+    </section>
+
+    <section class="section">
       <h2>SCS対応の新規アプリ案</h2>
       <table>
         <thead>
