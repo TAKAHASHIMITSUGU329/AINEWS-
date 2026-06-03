@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>2026/06/05 高橋宿題回答</title>
+  <style>
+    :root {
+      --ink: #1f2933;
+      --muted: #617083;
+      --line: #d8dee8;
+      --bg: #f6f8fb;
+      --panel: #ffffff;
+      --navy: #243b53;
+      --green: #0f766e;
+      --gold: #b7791f;
+      --red: #b42318;
+      --blue: #2563eb;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--bg);
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", "YuGothic", "Segoe UI", sans-serif;
+      line-height: 1.7;
+    }
+
+    a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .shell {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 32px 20px 56px;
+    }
+
+    .top {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 24px;
+      align-items: stretch;
+      margin-bottom: 24px;
+    }
+
+    .hero,
+    .summary,
+    .section,
+    .box-card,
+    .roadmap-item {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    .hero {
+      padding: 30px;
+      border-top: 6px solid var(--navy);
+    }
+
+    .eyebrow {
+      color: var(--green);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      color: var(--navy);
+      font-size: 34px;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      margin: 0;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .summary {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .summary h2,
+    .section h2 {
+      margin: 0 0 14px;
+      color: var(--navy);
+      font-size: 22px;
+      letter-spacing: 0;
+    }
+
+    .summary ul {
+      padding-left: 20px;
+      margin: 0;
+    }
+
+    .summary li {
+      margin: 6px 0;
+    }
+
+    .meta {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 18px 0 0;
+    }
+
+    .meta div {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px 12px;
+      background: #fbfcfe;
+    }
+
+    .meta strong {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+
+    .section {
+      padding: 26px;
+      margin-top: 18px;
+    }
+
+    .callout {
+      border-left: 5px solid var(--green);
+      background: #eef8f6;
+      padding: 16px 18px;
+      border-radius: 6px;
+      margin: 18px 0 0;
+      font-weight: 700;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .box-card {
+      padding: 18px;
+      min-height: 260px;
+    }
+
+    .box-card h3 {
+      margin: 0 0 10px;
+      color: var(--navy);
+      font-size: 18px;
+    }
+
+    .tag {
+      display: inline-block;
+      border-radius: 999px;
+      color: #fff;
+      padding: 3px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .tag.free {
+      background: var(--green);
+    }
+
+    .tag.sub {
+      background: var(--blue);
+    }
+
+    .tag.once {
+      background: var(--gold);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 14px;
+      overflow-wrap: anywhere;
+    }
+
+    th,
+    td {
+      border: 1px solid var(--line);
+      padding: 10px 12px;
+      vertical-align: top;
+      text-align: left;
+    }
+
+    th {
+      background: #edf2f7;
+      color: var(--navy);
+      font-size: 14px;
+    }
+
+    td {
+      background: #fff;
+    }
+
+    .priority {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 48px;
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+      background: var(--red);
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .roadmap {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .roadmap-item {
+      padding: 16px;
+      border-top: 4px solid var(--green);
+      min-height: 138px;
+    }
+
+    .roadmap-item strong {
+      display: block;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+
+    .footer {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 22px;
+      text-align: right;
+    }
+
+    @media (max-width: 900px) {
+      .top,
+      .grid-3,
+      .split,
+      .roadmap {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: 28px;
+      }
+
+      .meta {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <div class="top">
+      <section class="hero">
+        <div class="eyebrow">2026/06/05 MTG 向け</div>
+        <h1>高橋宿題回答<br>無料配信・3つのボックス・SCS対応サービス案</h1>
+        <p class="lead">2026年5月15日の議事録・文字起こしをもとに、高橋担当の宿題への回答を整理した提案資料です。</p>
+        <div class="meta">
+          <div><strong>対象</strong>水野様・藤村様 MTG</div>
+          <div><strong>期限</strong>2026年6月5日</div>
+          <div><strong>作成</strong>高橋案</div>
+        </div>
+      </section>
+
+      <aside class="summary">
+        <div>
+          <h2>結論</h2>
+          <ul>
+            <li>Kurocoを会員管理・CMSの中核に置く</li>
+            <li>無料メール配信はResend等の併用が現実的</li>
+            <li>サービスは3つのボックスで整理する</li>
+            <li>最初の新規アプリはSCS対応度チェッカーを推奨</li>
+            <li>高橋側は開発・自動化・資料生成をワンショット化できる</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+
+    <section class="section">
+      <h2>宿題の理解</h2>
+      <table>
+        <thead>
+          <tr><th>宿題</th><th>求められている回答</th><th>期限</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>無料会員向けサービスの構築方法</td><td>無料配信、AIニュースサイトをKurocoで作れるか。別メール配信システムが必要か。</td><td>2026/06/05</td></tr>
+          <tr><td>3つのボックスの具体化</td><td>完全無料、有料サブスク、有料ワンショットに何を置くか。</td><td>2026/06/05</td></tr>
+          <tr><td>SCS対応アプリ案</td><td>SCS評価制度に対応する新規アプリ・サービス案を出す。</td><td>2026/06/05</td></tr>
+          <tr><td>高橋が提供できるサービス</td><td>ワンショットの部屋に置ける開発・支援メニューを整理する。</td><td>2026/06/05</td></tr>
+        </tbody>
+      </table>
+      <div class="callout">推奨方針: Kuroco + Resend + AiNEWS既存機能を組み合わせ、無料配信MVPから始める。</div>
+    </section>
+
+    <section class="section">
+      <h2>3つのボックス</h2>
+      <div class="grid-3">
+        <article class="box-card">
+          <span class="tag free">完全無料</span>
+          <h3>集客・信頼形成</h3>
+          <p>AIニュース、週次メール、情報漏洩チェック導線、SCS簡易チェックを提供。無料情報でリスクを認識してもらう。</p>
+          <ul>
+            <li>AIニュース3行要約</li>
+            <li>週次メール</li>
+            <li>SCS簡易5問チェック</li>
+          </ul>
+        </article>
+        <article class="box-card">
+          <span class="tag sub">有料サブスク</span>
+          <h3>継続収益・日常利用</h3>
+          <p>EDR、7ツール、詳細ニュース、月次PDF、SCS対応度チェッカーを提供。月額1,000円台の入口と標準プランを用意。</p>
+          <ul>
+            <li>EDR + 使い方ガイド</li>
+            <li>月次PDFレポート</li>
+            <li>詳細分析記事</li>
+          </ul>
+        </article>
+        <article class="box-card">
+          <span class="tag once">有料ワンショット</span>
+          <h3>高単価・個別支援</h3>
+          <p>SCS支援、研修、ガイドライン作成、会員サイト/アプリ開発を提供。個別見積もりで収益の柱にする。</p>
+          <ul>
+            <li>SCS評価取得支援</li>
+            <li>生成AIガイドライン作成</li>
+            <li>Kuroco連携開発</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>無料会員向けサービスの構築方法</h2>
+      <table>
+        <thead>
+          <tr><th>機能</th><th>推奨ツール</th><th>理由</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>会員登録・ログイン</td><td>Kuroco</td><td>既に認証・会員ティア制御を検証済み。</td></tr>
+          <tr><td>ニュースCMS</td><td>Kuroco</td><td>記事管理とAPI配信に向く。</td></tr>
+          <tr><td>静的サイト表示</td><td>Vercel / Netlify / 静的HTML</td><td>低コストで表示が速く、API連携しやすい。</td></tr>
+          <tr><td>メール配信</td><td>Resend併用</td><td>API連携、配信ログ、開発のしやすさを優先。</td></tr>
+          <tr><td>AIニュース収集</td><td>AiNEWS既存機能</td><td>Gemini Search Grounding + 要約が実装済み。</td></tr>
+          <tr><td>月次PDF</td><td>AiNEWS既存機能</td><td>既存のレポート生成機能を活用できる。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <h2>SCS対応の新規アプリ案</h2>
+      <table>
+        <thead>
+          <tr><th>優先</th><th>アプリ</th><th>概要</th><th>有料導線</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="priority">最優先</span></td><td>SCS対応度チェッカー</td><td>30問診断、スコア化、改善ToDo、PDF出力。</td><td>SCS評価取得支援、EDR導入、ガイドライン作成</td></tr>
+          <tr><td>高</td><td>生成AIガイドライン自動作成</td><td>業種・利用ツールに応じた社内ガイドラインを生成。</td><td>会社別カスタマイズ、研修</td></tr>
+          <tr><td>中</td><td>AIリスククイズ自動生成</td><td>最新ニュースから従業員教育用クイズを生成。</td><td>研修パッケージ、教育レポート</td></tr>
+          <tr><td>中</td><td>EDRアラートやさしい解説</td><td>専門的なアラートを一般向け日本語に変換。</td><td>EDR導入支援、動画マニュアル</td></tr>
+          <tr><td>中</td><td>議事録・ポッドキャスト生成</td><td>文字起こしから議事録、要約、音声、スライドを生成。</td><td>業務効率化支援、ナレッジ化</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <h2>高橋が提供できるワンショットサービス</h2>
+      <div class="split">
+        <table>
+          <thead>
+            <tr><th>メニュー</th><th>価格目安</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Kuroco連携プロトタイプ構築</td><td>30万円〜</td></tr>
+            <tr><td>AIニュース配信MVP構築</td><td>30万〜80万円</td></tr>
+            <tr><td>SCS対応度チェッカー開発</td><td>50万〜100万円</td></tr>
+          </tbody>
+        </table>
+        <table>
+          <thead>
+            <tr><th>メニュー</th><th>価格目安</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>生成AIガイドライン生成ツール</td><td>30万〜80万円</td></tr>
+            <tr><td>議事録/音声/資料生成ワークフロー</td><td>20万〜60万円</td></tr>
+            <tr><td>EDR利用ガイド作成</td><td>10万〜30万円</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>ロードマップ案</h2>
+      <div class="roadmap">
+        <div class="roadmap-item"><strong>1週目</strong>3つのボックスのメニュー確定、無料ニュース配信仕様を決める。</div>
+        <div class="roadmap-item"><strong>2〜3週目</strong>Kuroco + Resend の無料配信MVPを構築する。</div>
+        <div class="roadmap-item"><strong>4〜6週目</strong>SCS対応度チェッカーのプロトタイプを作成する。</div>
+        <div class="roadmap-item"><strong>7週目以降</strong>有料サブスク導線、PDF出力、ワンショット申込導線を追加する。</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>次回MTGでの回答サマリ</h2>
+      <div class="callout">
+        無料配信はKurocoをCMS・会員管理の中心にしつつ、メールはResend等を併用するのが現実的です。サービスは「完全無料」「有料サブスク」「有料ワンショット」の3つの箱で整理し、最初の新規アプリはSCS対応度チェッカーを推奨します。高橋側では、Kuroco連携、AIニュース配信MVP、SCS診断アプリ、議事録・音声・資料生成ワークフローをワンショットサービスとして提供可能です。
+      </div>
+    </section>
+
+    <p class="footer">参考: Kuroco / Resend / AiNEWS既存実装 / 2026.05.15議事録・文字起こし</p>
+  </main>
+</body>
+</html>
