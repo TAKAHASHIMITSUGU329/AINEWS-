@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>案3: ダークモード プロフェッショナル</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+:root {
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-card: #1e293b;
+    --bg-elevated: #334155;
+    --accent: #06b6d4;
+    --accent-glow: rgba(6,182,212,0.15);
+    --accent-hover: #22d3ee;
+    --text: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --border: #334155;
+    --success: #10b981;
+    --danger: #ef4444;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", system-ui, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+/* Header */
+header {
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
+    padding: 0;
+}
+
+.header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+}
+
+header h1 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-icon {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, var(--accent), #a78bfa);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+}
+
+.header-status {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    color: var(--success);
+}
+
+.status-dot {
+    width: 6px; height: 6px;
+    background: var(--success);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--success);
+}
+
+.last-update {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+/* Nav tabs */
+.nav-tabs {
+    display: flex;
+    gap: 0;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.nav-tab {
+    padding: 10px 20px;
+    font-size: 0.82rem;
+    font-family: inherit;
+    color: var(--text-muted);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 500;
+}
+
+.nav-tab:hover { color: var(--text-secondary); }
+.nav-tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+}
+
+/* Content */
+main {
+    padding-top: 24px;
+}
+
+/* Stats strip */
+.stats-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.stat-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-item::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+}
+
+.stat-item:nth-child(1)::after { background: var(--accent); }
+.stat-item:nth-child(2)::after { background: var(--danger); }
+.stat-item:nth-child(3)::after { background: #f97316; }
+.stat-item:nth-child(4)::after { background: var(--success); }
+
+.stat-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.stat-value { font-size: 1.6rem; font-weight: 800; margin-top: 4px; }
+.stat-change { font-size: 0.7rem; color: var(--success); margin-top: 2px; }
+
+/* Two col */
+.content-grid {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 20px;
+}
+
+/* Sidebar */
+.sidebar-panel {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+    position: sticky;
+    top: 20px;
+}
+
+.panel-title {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 14px;
+    font-weight: 600;
+}
+
+.search-input {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.82rem;
+    font-family: inherit;
+    outline: none;
+    background: var(--bg-primary);
+    color: var(--text);
+    margin-bottom: 14px;
+}
+
+.search-input::placeholder { color: var(--text-muted); }
+.search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+
+.filter-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.filter-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-family: inherit;
+    width: 100%;
+    text-align: left;
+}
+
+.filter-item:hover { background: var(--bg-elevated); }
+.filter-item.active { background: var(--accent-glow); color: var(--accent); }
+.filter-count { font-size: 0.72rem; color: var(--text-muted); background: var(--bg-primary); padding: 1px 8px; border-radius: 10px; }
+
+.chart-wrapper { margin-top: 20px; }
+
+/* Incident Feed */
+.feed-header {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+
+.incident-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.incident-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    transition: all 0.2s;
+    position: relative;
+}
+
+.incident-card:hover {
+    border-color: rgba(6,182,212,0.3);
+    box-shadow: 0 0 20px var(--accent-glow);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+}
+
+.severity-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.severity-high { background: var(--danger); box-shadow: 0 0 6px rgba(239,68,68,0.4); }
+.severity-medium { background: #f97316; box-shadow: 0 0 6px rgba(249,115,22,0.4); }
+.severity-low { background: var(--accent); box-shadow: 0 0 6px var(--accent-glow); }
+
+.category-badge {
+    padding: 2px 10px;
+    border-radius: 4px;
+    font-size: 0.68rem;
+    font-weight: 600;
+}
+
+.badge-情報漏洩 { background: rgba(239,68,68,0.15); color: #fca5a5; border: 1px solid rgba(239,68,68,0.2); }
+.badge-悪用 { background: rgba(139,92,246,0.15); color: #c4b5fd; border: 1px solid rgba(139,92,246,0.2); }
+.badge-障害 { background: rgba(234,179,8,0.15); color: #fde047; border: 1px solid rgba(234,179,8,0.2); }
+.badge-安全性 { background: rgba(249,115,22,0.15); color: #fdba74; border: 1px solid rgba(249,115,22,0.2); }
+.badge-規制 { background: rgba(59,130,246,0.15); color: #93c5fd; border: 1px solid rgba(59,130,246,0.2); }
+
+.date { font-size: 0.72rem; color: var(--text-muted); }
+.source-tag { font-size: 0.65rem; color: var(--text-muted); background: var(--bg-primary); padding: 2px 8px; border-radius: 4px; margin-left: auto; }
+
+.incident-card h4 { font-size: 0.9rem; margin-bottom: 4px; font-weight: 600; }
+.incident-card h4 a { color: var(--text); text-decoration: none; }
+.incident-card h4 a:hover { color: var(--accent-hover); }
+
+.digest-preview { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; }
+
+.toggle-btn {
+    background: none;
+    border: none;
+    color: var(--accent);
+    font-size: 0.75rem;
+    font-family: inherit;
+    cursor: pointer;
+    padding: 4px 0;
+    font-weight: 600;
+}
+
+.digest { margin-top: 10px; border-top: 1px solid var(--border); padding-top: 10px; }
+.digest-section { margin-bottom: 8px; }
+.digest-section h5 { font-size: 0.72rem; font-weight: 700; color: var(--accent); margin-bottom: 2px; letter-spacing: 0.02em; }
+.digest-section p { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6; }
+.digest-section ul { margin: 0; padding-left: 16px; font-size: 0.8rem; color: var(--text-secondary); }
+
+/* Footer */
+footer {
+    margin-top: 48px;
+    padding: 16px 0;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.72rem;
+    border-top: 1px solid var(--border);
+}
+
+@media (max-width: 768px) {
+    .stats-strip { grid-template-columns: repeat(2, 1fr); }
+    .content-grid { grid-template-columns: 1fr; }
+    .sidebar-panel { position: static; }
+}
+</style>
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <div class="header-inner">
+            <h1>
+                <span class="logo-icon">AI</span>
+                Incident Monitor
+            </h1>
+            <div class="header-status">
+                <span class="status-indicator"><span class="status-dot"></span>稼働中</span>
+                <span class="last-update">最終更新: 14:32</span>
+            </div>
+        </div>
+    </div>
+</header>
+
+<nav>
+    <div class="nav-tabs">
+        <button class="nav-tab active">ダッシュボード</button>
+        <button class="nav-tab">インシデント</button>
+        <button class="nav-tab">レポート</button>
+        <button class="nav-tab">設定</button>
+    </div>
+</nav>
+
+<main class="container">
+    <div class="stats-strip">
+        <div class="stat-item">
+            <div class="stat-label">総インシデント</div>
+            <div class="stat-value">5</div>
+            <div class="stat-change">+2 今週</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-label">重要度: 高</div>
+            <div class="stat-value" style="color:#ef4444;">2</div>
+            <div class="stat-change" style="color:#ef4444;">要対応</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-label">カテゴリ</div>
+            <div class="stat-value">5</div>
+            <div class="stat-change">分類済み</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-label">データソース</div>
+            <div class="stat-value" style="font-size:1rem;">Search + Alerts</div>
+            <div class="stat-change">アクティブ</div>
+        </div>
+    </div>
+
+    <div class="content-grid">
+        <aside>
+            <div class="sidebar-panel">
+                <div class="panel-title">フィルター</div>
+                <input type="text" class="search-input" placeholder="検索...">
+                <div class="filter-list">
+                    <button class="filter-item active"><span>すべて</span><span class="filter-count">5</span></button>
+                    <button class="filter-item"><span>情報漏洩</span><span class="filter-count">1</span></button>
+                    <button class="filter-item"><span>悪用</span><span class="filter-count">1</span></button>
+                    <button class="filter-item"><span>障害</span><span class="filter-count">1</span></button>
+                    <button class="filter-item"><span>安全性</span><span class="filter-count">1</span></button>
+                    <button class="filter-item"><span>規制</span><span class="filter-count">1</span></button>
+                </div>
+                <div class="chart-wrapper">
+                    <div class="panel-title" style="margin-top:16px;">カテゴリ分布</div>
+                    <canvas id="categoryChart"></canvas>
+                </div>
+            </div>
+        </aside>
+
+        <section>
+            <div class="feed-header">インシデントフィード (5件)</div>
+            <div class="incident-list">
+                <article class="incident-card">
+                    <div class="card-header">
+                        <span class="severity-dot severity-high"></span>
+                        <span class="category-badge badge-情報漏洩">情報漏洩</span>
+                        <span class="date">2026-03-10</span>
+                        <span class="source-tag">search</span>
+                    </div>
+                    <h4><a href="#">ChatGPTの会話履歴が他ユーザーに表示されるバグが発覚</a></h4>
+                    <p class="digest-preview">OpenAIのChatGPTにおいて、一部ユーザーの会話タイトルが他のユーザーに表示される不具合が報告された...</p>
+                    <button class="toggle-btn" onclick="toggleDigest(this)">詳細を表示</button>
+                    <div class="digest" style="display:none">
+                        <div class="digest-section"><h5>要約</h5><p>OpenAIのChatGPTにおいて、一部ユーザーの会話タイトルが他のユーザーに表示される不具合が報告された。原因はRedisのキャッシュライブラリのバグで、約1.2%のユーザーが影響を受けた。</p></div>
+                        <div class="digest-section"><h5>原因</h5><p>オープンソースライブラリredis-pyのバグにより、特定条件下でキャッシュされたデータが誤ったユーザーに返される問題が発生。</p></div>
+                        <div class="digest-section"><h5>対策（中小企業向け）</h5><ul><li>社内でのAIチャットツール利用ガイドラインを策定する</li><li>機密情報をAIチャットに入力しない運用ルールを徹底する</li></ul></div>
+                    </div>
+                </article>
+                <article class="incident-card">
+                    <div class="card-header">
+                        <span class="severity-dot severity-high"></span>
+                        <span class="category-badge badge-悪用">悪用</span>
+                        <span class="date">2026-03-08</span>
+                        <span class="source-tag">alerts</span>
+                    </div>
+                    <h4><a href="#">ディープフェイク音声を使った詐欺事件が急増</a></h4>
+                    <p class="digest-preview">AI音声クローニング技術を悪用し、企業幹部の声を模倣して送金指示を出す詐欺事件が複数報告された...</p>
+                </article>
+                <article class="incident-card">
+                    <div class="card-header">
+                        <span class="severity-dot severity-medium"></span>
+                        <span class="category-badge badge-障害">障害</span>
+                        <span class="date">2026-03-05</span>
+                        <span class="source-tag">search</span>
+                    </div>
+                    <h4><a href="#">自動運転車のAIシステム障害で緊急停止が多発</a></h4>
+                    <p class="digest-preview">米国の自動運転タクシーにおいて、特定の気象条件下でAI認識システムが誤作動し緊急停止する事象が多発...</p>
+                </article>
+                <article class="incident-card">
+                    <div class="card-header">
+                        <span class="severity-dot severity-high"></span>
+                        <span class="category-badge badge-安全性">安全性</span>
+                        <span class="date">2026-03-03</span>
+                        <span class="source-tag">alerts</span>
+                    </div>
+                    <h4><a href="#">AIによるフィッシングメールが従来型を上回る成功率</a></h4>
+                    <p class="digest-preview">セキュリティ企業の調査で、AI生成フィッシングメールのクリック率が従来の手動作成メールを大幅に上回る...</p>
+                </article>
+                <article class="incident-card">
+                    <div class="card-header">
+                        <span class="severity-dot severity-low"></span>
+                        <span class="category-badge badge-規制">規制</span>
+                        <span class="date">2026-03-01</span>
+                        <span class="source-tag">search</span>
+                    </div>
+                    <h4><a href="#">EU AI法の施行でハイリスクAIの登録義務が開始</a></h4>
+                    <p class="digest-preview">EU AI法の段階的施行が進み、ハイリスクAIシステムの事前登録義務が正式に開始された...</p>
+                </article>
+            </div>
+        </section>
+    </div>
+</main>
+
+<footer><div class="container"><p>&copy; 2026 AIbird — Incident Monitor</p></div></footer>
+
+<script>
+function toggleDigest(btn) {
+    var digest = btn.parentElement.querySelector('.digest');
+    var preview = btn.parentElement.querySelector('.digest-preview');
+    if (!digest) return;
+    if (digest.style.display === 'none') {
+        digest.style.display = '';
+        if (preview) preview.style.display = 'none';
+        btn.textContent = '詳細を閉じる';
+    } else {
+        digest.style.display = 'none';
+        if (preview) preview.style.display = '';
+        btn.textContent = '詳細を表示';
+    }
+}
+
+new Chart(document.getElementById('categoryChart'), {
+    type: 'doughnut',
+    data: {
+        labels: ['情報漏洩', '悪用', '障害', '安全性', '規制'],
+        datasets: [{
+            data: [1, 1, 1, 1, 1],
+            backgroundColor: ['rgba(239,68,68,0.7)', 'rgba(139,92,246,0.7)', 'rgba(234,179,8,0.7)', 'rgba(249,115,22,0.7)', 'rgba(59,130,246,0.7)'],
+            borderColor: '#1e293b',
+            borderWidth: 2,
+        }]
+    },
+    options: {
+        responsive: true,
+        cutout: '60%',
+        plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', padding: 10, usePointStyle: true, pointStyle: 'circle', font: { size: 10 } } } }
+    }
+});
+</script>
+</body>
+</html>
