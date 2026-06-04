@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>案2: グラスモーフィズム</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", system-ui, sans-serif;
+    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 40%, #312e81 70%, #1e3a5f 100%);
+    color: #e2e8f0;
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* Decorative blobs */
+body::before, body::after {
+    content: '';
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(100px);
+    z-index: 0;
+    pointer-events: none;
+}
+body::before {
+    width: 500px; height: 500px;
+    background: rgba(99, 102, 241, 0.15);
+    top: -100px; right: -100px;
+}
+body::after {
+    width: 400px; height: 400px;
+    background: rgba(236, 72, 153, 0.1);
+    bottom: 100px; left: -100px;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Glass card mixin */
+.glass {
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+}
+
+/* Header */
+header {
+    padding: 28px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+header .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+header h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #c7d2fe, #e0e7ff, #a5b4fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.02em;
+}
+
+header .subtitle {
+    color: #94a3b8;
+    font-size: 0.85rem;
+    margin-top: 2px;
+}
+
+.live-dot {
+    width: 8px; height: 8px;
+    background: #34d399;
+    border-radius: 50%;
+    display: inline-block;
+    animation: pulse 2s infinite;
+    margin-right: 6px;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(52,211,153,0.4); }
+    50% { opacity: 0.8; box-shadow: 0 0 0 8px rgba(52,211,153,0); }
+}
+
+/* Controls */
+.controls {
+    margin: 28px 0 20px;
+}
+
+.controls h2 {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 10px;
+}
+
+.source-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 8px 20px;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    color: #cbd5e1;
+    font-weight: 500;
+    font-size: 0.85rem;
+    transition: all 0.3s;
+    background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(10px);
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.btn:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(165,180,252,0.4);
+    color: #e0e7ff;
+}
+
+.btn.active {
+    background: linear-gradient(135deg, rgba(99,102,241,0.3), rgba(139,92,246,0.3));
+    border-color: rgba(165,180,252,0.5);
+    color: #e0e7ff;
+    box-shadow: 0 4px 20px rgba(99,102,241,0.2);
+}
+
+/* Chart Panel */
+.chart-panel {
+    margin: 28px 0;
+    padding: 24px;
+}
+
+.chart-panel h3 {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 16px;
+}
+
+.chart-container {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+/* Filter */
+.filter-section {
+    margin: 20px 0;
+}
+
+.search-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-family: inherit;
+    outline: none;
+    transition: all 0.3s;
+    margin-bottom: 12px;
+    background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(10px);
+    color: #e2e8f0;
+}
+
+.search-input::placeholder { color: #64748b; }
+.search-input:focus { border-color: rgba(165,180,252,0.5); background: rgba(255,255,255,0.07); }
+
+.filter-badges {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.filter-badge {
+    padding: 5px 14px;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-family: inherit;
+    background: rgba(255,255,255,0.03);
+    color: #94a3b8;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.filter-badge:hover { border-color: rgba(165,180,252,0.3); color: #c7d2fe; }
+.filter-badge.active {
+    background: linear-gradient(135deg, rgba(99,102,241,0.25), rgba(139,92,246,0.25));
+    color: #e0e7ff;
+    border-color: rgba(165,180,252,0.4);
+}
+
+/* Incident Cards */
+.incidents { margin: 28px 0; }
+
+.incidents h2 {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 16px;
+}
+
+.incident-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.incident-card {
+    padding: 18px 22px;
+    transition: all 0.3s;
+}
+
+.incident-card:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(165,180,252,0.2);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    transform: translateY(-2px);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+}
+
+.category-badge {
+    padding: 3px 12px;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: white;
+}
+
+.badge-情報漏洩 { background: linear-gradient(135deg, #ef4444, #dc2626); }
+.badge-悪用 { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+.badge-障害 { background: linear-gradient(135deg, #eab308, #ca8a04); color: #1e293b; }
+.badge-安全性 { background: linear-gradient(135deg, #f97316, #ea580c); }
+.badge-規制 { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+
+.date { font-size: 0.75rem; color: #64748b; }
+.source-tag { font-size: 0.68rem; color: #64748b; background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 4px; }
+
+.incident-card h4 {
+    font-size: 0.95rem;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #f1f5f9;
+}
+
+.incident-card h4 a { color: inherit; text-decoration: none; }
+.incident-card h4 a:hover { color: #c7d2fe; }
+
+.digest-preview { font-size: 0.82rem; color: #94a3b8; line-height: 1.5; }
+
+.toggle-btn {
+    background: none;
+    border: none;
+    color: #a5b4fc;
+    font-size: 0.78rem;
+    font-family: inherit;
+    cursor: pointer;
+    padding: 4px 0;
+    font-weight: 600;
+}
+.toggle-btn:hover { color: #c7d2fe; }
+
+.digest { margin-top: 12px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 12px; }
+.digest-section { margin-bottom: 10px; }
+.digest-section h5 { font-size: 0.75rem; font-weight: 700; color: #a5b4fc; margin-bottom: 3px; }
+.digest-section p { font-size: 0.82rem; color: #94a3b8; line-height: 1.6; }
+.digest-section ul { margin: 0; padding-left: 18px; font-size: 0.82rem; color: #94a3b8; }
+
+/* Footer */
+footer {
+    margin-top: 48px;
+    padding: 20px 0;
+    text-align: center;
+    color: #475569;
+    font-size: 0.75rem;
+    border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+@media (max-width: 640px) {
+    .source-buttons { flex-direction: column; }
+    .btn { text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <div>
+            <h1>AI Incident News</h1>
+            <p class="subtitle">AIインシデント ニュースモニタリング</p>
+        </div>
+        <div><span class="live-dot"></span><span style="color:#94a3b8;font-size:0.8rem;">リアルタイム監視中</span></div>
+    </div>
+</header>
+
+<main class="container">
+    <section class="controls">
+        <h2>データソース</h2>
+        <div class="source-buttons">
+            <button class="btn active">デモ</button>
+            <button class="btn">Google Search</button>
+            <button class="btn">Google Alerts</button>
+            <button class="btn">両方</button>
+        </div>
+    </section>
+
+    <div class="chart-panel glass">
+        <h3>カテゴリ別インシデント件数</h3>
+        <div class="chart-container">
+            <canvas id="categoryChart"></canvas>
+        </div>
+    </div>
+
+    <section class="filter-section">
+        <input type="text" class="search-input" placeholder="キーワードで検索...">
+        <div class="filter-badges">
+            <button class="filter-badge active">すべて</button>
+            <button class="filter-badge">情報漏洩 (1)</button>
+            <button class="filter-badge">悪用 (1)</button>
+            <button class="filter-badge">障害 (1)</button>
+            <button class="filter-badge">安全性 (1)</button>
+            <button class="filter-badge">規制 (1)</button>
+        </div>
+    </section>
+
+    <section class="incidents">
+        <h2>インシデント一覧 (5件)</h2>
+        <div class="incident-list">
+            <article class="incident-card glass">
+                <div class="card-header">
+                    <span class="category-badge badge-情報漏洩">情報漏洩</span>
+                    <span class="date">2026-03-10</span>
+                    <span class="source-tag">search</span>
+                </div>
+                <h4><a href="#">ChatGPTの会話履歴が他ユーザーに表示されるバグが発覚</a></h4>
+                <p class="digest-preview">OpenAIのChatGPTにおいて、一部ユーザーの会話タイトルが他のユーザーに表示される不具合が報告された...</p>
+                <button class="toggle-btn" onclick="toggleDigest(this)">詳細を表示</button>
+                <div class="digest" style="display:none">
+                    <div class="digest-section"><h5>要約</h5><p>OpenAIのChatGPTにおいて、一部ユーザーの会話タイトルが他のユーザーに表示される不具合が報告された。原因はRedisのキャッシュライブラリのバグで、約1.2%のユーザーが影響を受けた。</p></div>
+                    <div class="digest-section"><h5>原因</h5><p>オープンソースライブラリredis-pyのバグにより、特定条件下でキャッシュされたデータが誤ったユーザーに返される問題が発生。</p></div>
+                    <div class="digest-section"><h5>対策（中小企業向け）</h5><ul><li>社内でのAIチャットツール利用ガイドラインを策定する</li><li>機密情報をAIチャットに入力しない運用ルールを徹底する</li></ul></div>
+                </div>
+            </article>
+            <article class="incident-card glass">
+                <div class="card-header">
+                    <span class="category-badge badge-悪用">悪用</span>
+                    <span class="date">2026-03-08</span>
+                    <span class="source-tag">alerts</span>
+                </div>
+                <h4><a href="#">ディープフェイク音声を使った詐欺事件が急増</a></h4>
+                <p class="digest-preview">AI音声クローニング技術を悪用し、企業幹部の声を模倣して送金指示を出す詐欺事件が複数報告された...</p>
+                <button class="toggle-btn">詳細を表示</button>
+            </article>
+            <article class="incident-card glass">
+                <div class="card-header">
+                    <span class="category-badge badge-障害">障害</span>
+                    <span class="date">2026-03-05</span>
+                    <span class="source-tag">search</span>
+                </div>
+                <h4><a href="#">自動運転車のAIシステム障害で緊急停止が多発</a></h4>
+                <p class="digest-preview">米国の自動運転タクシーにおいて、特定の気象条件下でAI認識システムが誤作動し緊急停止する事象が多発...</p>
+                <button class="toggle-btn">詳細を表示</button>
+            </article>
+            <article class="incident-card glass">
+                <div class="card-header">
+                    <span class="category-badge badge-安全性">安全性</span>
+                    <span class="date">2026-03-03</span>
+                    <span class="source-tag">alerts</span>
+                </div>
+                <h4><a href="#">AIによるフィッシングメールが従来型を上回る成功率</a></h4>
+                <p class="digest-preview">セキュリティ企業の調査で、AI生成フィッシングメールのクリック率が従来の手動作成メールを大幅に上回る...</p>
+                <button class="toggle-btn">詳細を表示</button>
+            </article>
+            <article class="incident-card glass">
+                <div class="card-header">
+                    <span class="category-badge badge-規制">規制</span>
+                    <span class="date">2026-03-01</span>
+                    <span class="source-tag">search</span>
+                </div>
+                <h4><a href="#">EU AI法の施行でハイリスクAIの登録義務が開始</a></h4>
+                <p class="digest-preview">EU AI法の段階的施行が進み、ハイリスクAIシステムの事前登録義務が正式に開始された...</p>
+                <button class="toggle-btn">詳細を表示</button>
+            </article>
+        </div>
+    </section>
+</main>
+
+<footer><div class="container"><p>&copy; 2026 AIbird</p></div></footer>
+
+<script>
+function toggleDigest(btn) {
+    var digest = btn.parentElement.querySelector('.digest');
+    var preview = btn.parentElement.querySelector('.digest-preview');
+    if (!digest) return;
+    if (digest.style.display === 'none') {
+        digest.style.display = '';
+        if (preview) preview.style.display = 'none';
+        btn.textContent = '詳細を閉じる';
+    } else {
+        digest.style.display = 'none';
+        if (preview) preview.style.display = '';
+        btn.textContent = '詳細を表示';
+    }
+}
+
+new Chart(document.getElementById('categoryChart'), {
+    type: 'bar',
+    data: {
+        labels: ['情報漏洩', '悪用', '障害', '安全性', '規制'],
+        datasets: [{
+            data: [1, 1, 1, 1, 1],
+            backgroundColor: [
+                'rgba(239,68,68,0.6)', 'rgba(139,92,246,0.6)', 'rgba(234,179,8,0.6)',
+                'rgba(249,115,22,0.6)', 'rgba(59,130,246,0.6)'
+            ],
+            borderColor: [
+                'rgba(239,68,68,0.8)', 'rgba(139,92,246,0.8)', 'rgba(234,179,8,0.8)',
+                'rgba(249,115,22,0.8)', 'rgba(59,130,246,0.8)'
+            ],
+            borderWidth: 1,
+            borderRadius: 8,
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+            y: { beginAtZero: true, ticks: { stepSize: 1, color: '#64748b' }, grid: { color: 'rgba(255,255,255,0.04)' } },
+            x: { ticks: { color: '#94a3b8' }, grid: { display: false } }
+        }
+    }
+});
+</script>
+</body>
+</html>
