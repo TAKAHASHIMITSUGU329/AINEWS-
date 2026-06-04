@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>案5: ミニマル Notion風</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+:root {
+    --bg: #ffffff;
+    --bg-hover: #f7f7f5;
+    --bg-secondary: #fbfbfa;
+    --text: #37352f;
+    --text-secondary: #787774;
+    --text-light: #b4b4b0;
+    --border: #e9e9e7;
+    --accent: #2383e2;
+    --accent-bg: #e8f0fe;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: -apple-system, "Hiragino Sans", "Hiragino Kaku Gothic ProN", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 15px;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 48px;
+}
+
+/* Header — ultra minimal */
+header {
+    padding: 40px 0 8px;
+    border-bottom: none;
+}
+
+header h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--text);
+}
+
+.header-meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 6px;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+.header-meta .divider {
+    color: var(--border);
+}
+
+/* Controls — inline */
+.controls {
+    margin: 24px 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.controls-label {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    white-space: nowrap;
+}
+
+.tab-group {
+    display: flex;
+    gap: 2px;
+}
+
+.tab-btn {
+    padding: 4px 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.82rem;
+    font-family: inherit;
+    color: var(--text-secondary);
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.tab-btn:hover { background: var(--bg-hover); color: var(--text); }
+.tab-btn.active { background: var(--accent-bg); color: var(--accent); }
+
+/* Divider */
+.section-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 16px 0;
+}
+
+/* View toggle */
+.view-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 16px 0 8px;
+}
+
+.view-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.view-left h2 {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.count-badge {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    background: var(--bg-secondary);
+    padding: 1px 8px;
+    border-radius: 4px;
+}
+
+.view-toggle {
+    display: flex;
+    gap: 4px;
+}
+
+.view-btn {
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-family: inherit;
+    color: var(--text-secondary);
+    background: white;
+    cursor: pointer;
+}
+
+.view-btn.active { background: var(--text); color: white; border-color: var(--text); }
+
+/* Search */
+.search-row {
+    margin-bottom: 12px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-family: inherit;
+    outline: none;
+    transition: all 0.15s;
+}
+
+.search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(35,131,226,0.1); }
+.search-input::placeholder { color: var(--text-light); }
+
+/* Filter tags */
+.filter-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+
+.filter-tag {
+    padding: 3px 10px;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-family: inherit;
+    color: var(--text-secondary);
+    background: var(--bg-secondary);
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.filter-tag:hover { background: var(--bg-hover); color: var(--text); }
+.filter-tag.active { background: var(--accent-bg); color: var(--accent); }
+
+/* Table view */
+.incident-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.incident-table th {
+    text-align: left;
+    font-size: 0.72rem;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-weight: 500;
+    padding: 6px 8px;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+}
+
+.incident-table td {
+    padding: 10px 8px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+}
+
+.incident-table tr:hover td {
+    background: var(--bg-hover);
+}
+
+.cat-tag {
+    display: inline-block;
+    padding: 1px 8px;
+    border-radius: 4px;
+    font-size: 0.72rem;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.cat-情報漏洩 { background: #fde8e8; color: #c53030; }
+.cat-悪用 { background: #ede9fe; color: #6d28d9; }
+.cat-障害 { background: #fef3c7; color: #92400e; }
+.cat-安全性 { background: #ffedd5; color: #c2410c; }
+.cat-規制 { background: #dbeafe; color: #1d4ed8; }
+
+.title-cell a {
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.88rem;
+}
+
+.title-cell a:hover { color: var(--accent); }
+
+.title-cell .summary {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    margin-top: 2px;
+    line-height: 1.4;
+}
+
+.date-cell { font-size: 0.8rem; color: var(--text-secondary); white-space: nowrap; }
+.source-cell { font-size: 0.75rem; color: var(--text-light); }
+
+/* Expandable detail */
+.detail-row td {
+    padding: 0 8px 12px 8px;
+    background: var(--bg-secondary);
+}
+
+.detail-content {
+    padding: 12px 16px;
+    border-radius: 6px;
+    background: white;
+    border: 1px solid var(--border);
+}
+
+.detail-section { margin-bottom: 8px; }
+.detail-section:last-child { margin-bottom: 0; }
+.detail-section h5 { font-size: 0.75rem; font-weight: 600; color: var(--accent); margin-bottom: 2px; }
+.detail-section p { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.6; }
+.detail-section ul { margin: 0; padding-left: 18px; font-size: 0.82rem; color: var(--text-secondary); }
+
+.expand-btn {
+    background: none;
+    border: none;
+    color: var(--accent);
+    font-size: 0.75rem;
+    font-family: inherit;
+    cursor: pointer;
+    font-weight: 500;
+}
+.expand-btn:hover { text-decoration: underline; }
+
+/* Chart section — small and tucked away */
+.chart-section {
+    margin: 24px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+}
+
+.chart-box {
+    width: 300px;
+    flex-shrink: 0;
+}
+
+.chart-box h3 {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.chart-legend {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-top: 8px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.legend-dot {
+    width: 10px; height: 10px;
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
+.legend-count { margin-left: auto; font-weight: 600; color: var(--text); }
+
+/* Footer */
+footer {
+    margin-top: 48px;
+    padding: 24px 0;
+    text-align: center;
+    color: var(--text-light);
+    font-size: 0.75rem;
+}
+
+@media (max-width: 640px) {
+    .container { padding: 0 16px; }
+    .chart-section { flex-direction: column; }
+    .chart-box { width: 100%; }
+    header h1 { font-size: 1.6rem; }
+}
+</style>
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <h1>AI Incident News</h1>
+        <div class="header-meta">
+            <span>AIインシデント ニュースモニタリング</span>
+            <span class="divider">|</span>
+            <span>最終更新: 2026-03-15 14:32</span>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+    <div class="controls">
+        <span class="controls-label">ソース:</span>
+        <div class="tab-group">
+            <button class="tab-btn active">デモ</button>
+            <button class="tab-btn">Google Search</button>
+            <button class="tab-btn">Google Alerts</button>
+            <button class="tab-btn">両方</button>
+        </div>
+    </div>
+
+    <hr class="section-divider">
+
+    <div class="chart-section">
+        <div class="chart-box">
+            <h3>カテゴリ分布</h3>
+            <canvas id="categoryChart" height="160"></canvas>
+        </div>
+        <div class="chart-legend">
+            <div class="legend-item"><span class="legend-dot" style="background:#ef4444"></span>情報漏洩<span class="legend-count">1</span></div>
+            <div class="legend-item"><span class="legend-dot" style="background:#8b5cf6"></span>悪用<span class="legend-count">1</span></div>
+            <div class="legend-item"><span class="legend-dot" style="background:#eab308"></span>障害<span class="legend-count">1</span></div>
+            <div class="legend-item"><span class="legend-dot" style="background:#f97316"></span>安全性<span class="legend-count">1</span></div>
+            <div class="legend-item"><span class="legend-dot" style="background:#3b82f6"></span>規制<span class="legend-count">1</span></div>
+        </div>
+    </div>
+
+    <hr class="section-divider">
+
+    <div class="view-controls">
+        <div class="view-left">
+            <h2>インシデント一覧</h2>
+            <span class="count-badge">5件</span>
+        </div>
+        <div class="view-toggle">
+            <button class="view-btn active">テーブル</button>
+            <button class="view-btn">カード</button>
+        </div>
+    </div>
+
+    <div class="search-row">
+        <input type="text" class="search-input" placeholder="フィルター...">
+    </div>
+
+    <div class="filter-row">
+        <button class="filter-tag active">すべて</button>
+        <button class="filter-tag">情報漏洩</button>
+        <button class="filter-tag">悪用</button>
+        <button class="filter-tag">障害</button>
+        <button class="filter-tag">安全性</button>
+        <button class="filter-tag">規制</button>
+    </div>
+
+    <table class="incident-table">
+        <thead>
+            <tr>
+                <th style="width:80px">カテゴリ</th>
+                <th>タイトル</th>
+                <th style="width:100px">日付</th>
+                <th style="width:70px">ソース</th>
+                <th style="width:50px"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="cat-tag cat-情報漏洩">情報漏洩</span></td>
+                <td class="title-cell">
+                    <a href="#">ChatGPTの会話履歴が他ユーザーに表示されるバグが発覚</a>
+                    <div class="summary">一部ユーザーの会話タイトルが他のユーザーに表示される不具合が報告</div>
+                </td>
+                <td class="date-cell">2026-03-10</td>
+                <td class="source-cell">search</td>
+                <td><button class="expand-btn" onclick="toggleRow(this)">開く</button></td>
+            </tr>
+            <tr class="detail-row" style="display:none">
+                <td colspan="5">
+                    <div class="detail-content">
+                        <div class="detail-section"><h5>要約</h5><p>OpenAIのChatGPTにおいて、一部ユーザーの会話タイトルが他のユーザーに表示される不具合が報告された。原因はRedisのキャッシュライブラリのバグで、約1.2%のユーザーが影響を受けた。</p></div>
+                        <div class="detail-section"><h5>原因</h5><p>オープンソースライブラリredis-pyのバグにより、特定条件下でキャッシュされたデータが誤ったユーザーに返される問題が発生。</p></div>
+                        <div class="detail-section"><h5>対策（中小企業向け）</h5><ul><li>社内でのAIチャットツール利用ガイドラインを策定する</li><li>機密情報をAIチャットに入力しない運用ルールを徹底する</li></ul></div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><span class="cat-tag cat-悪用">悪用</span></td>
+                <td class="title-cell">
+                    <a href="#">ディープフェイク音声を使った詐欺事件が急増</a>
+                    <div class="summary">企業幹部の声を模倣して送金指示を出す詐欺事件が複数報告</div>
+                </td>
+                <td class="date-cell">2026-03-08</td>
+                <td class="source-cell">alerts</td>
+                <td><button class="expand-btn" onclick="toggleRow(this)">開く</button></td>
+            </tr>
+            <tr class="detail-row" style="display:none"><td colspan="5"><div class="detail-content"><div class="detail-section"><h5>要約</h5><p>AI音声クローニング技術を悪用した詐欺事件の詳細。</p></div></div></td></tr>
+            <tr>
+                <td><span class="cat-tag cat-障害">障害</span></td>
+                <td class="title-cell">
+                    <a href="#">自動運転車のAIシステム障害で緊急停止が多発</a>
+                    <div class="summary">特定の気象条件下でAI認識システムが誤作動し緊急停止する事象が多発</div>
+                </td>
+                <td class="date-cell">2026-03-05</td>
+                <td class="source-cell">search</td>
+                <td><button class="expand-btn" onclick="toggleRow(this)">開く</button></td>
+            </tr>
+            <tr class="detail-row" style="display:none"><td colspan="5"><div class="detail-content"><div class="detail-section"><h5>要約</h5><p>自動運転タクシーのAI認識システム障害に関する詳細。</p></div></div></td></tr>
+            <tr>
+                <td><span class="cat-tag cat-安全性">安全性</span></td>
+                <td class="title-cell">
+                    <a href="#">AIによるフィッシングメールが従来型を上回る成功率</a>
+                    <div class="summary">AI生成フィッシングメールのクリック率が従来の手動作成メールを大幅に上回る</div>
+                </td>
+                <td class="date-cell">2026-03-03</td>
+                <td class="source-cell">alerts</td>
+                <td><button class="expand-btn" onclick="toggleRow(this)">開く</button></td>
+            </tr>
+            <tr class="detail-row" style="display:none"><td colspan="5"><div class="detail-content"><div class="detail-section"><h5>要約</h5><p>AI生成フィッシングメールの脅威に関する詳細。</p></div></div></td></tr>
+            <tr>
+                <td><span class="cat-tag cat-規制">規制</span></td>
+                <td class="title-cell">
+                    <a href="#">EU AI法の施行でハイリスクAIの登録義務が開始</a>
+                    <div class="summary">ハイリスクAIシステムの事前登録義務が正式に開始</div>
+                </td>
+                <td class="date-cell">2026-03-01</td>
+                <td class="source-cell">search</td>
+                <td><button class="expand-btn" onclick="toggleRow(this)">開く</button></td>
+            </tr>
+            <tr class="detail-row" style="display:none"><td colspan="5"><div class="detail-content"><div class="detail-section"><h5>要約</h5><p>EU AI法の段階的施行に関する詳細。</p></div></div></td></tr>
+        </tbody>
+    </table>
+</main>
+
+<footer><div class="container"><p>&copy; 2026 AIbird</p></div></footer>
+
+<script>
+function toggleRow(btn) {
+    var tr = btn.closest('tr');
+    var detailRow = tr.nextElementSibling;
+    if (!detailRow || !detailRow.classList.contains('detail-row')) return;
+    if (detailRow.style.display === 'none') {
+        detailRow.style.display = '';
+        btn.textContent = '閉じる';
+    } else {
+        detailRow.style.display = 'none';
+        btn.textContent = '開く';
+    }
+}
+
+new Chart(document.getElementById('categoryChart'), {
+    type: 'doughnut',
+    data: {
+        labels: ['情報漏洩', '悪用', '障害', '安全性', '規制'],
+        datasets: [{
+            data: [1, 1, 1, 1, 1],
+            backgroundColor: ['#ef4444', '#8b5cf6', '#eab308', '#f97316', '#3b82f6'],
+            borderColor: '#ffffff',
+            borderWidth: 3,
+        }]
+    },
+    options: {
+        responsive: true,
+        cutout: '70%',
+        plugins: { legend: { display: false } }
+    }
+});
+</script>
+</body>
+</html>
