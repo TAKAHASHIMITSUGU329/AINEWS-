@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>案4: Bento Grid</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+:root {
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --text: #0f172a;
+    --text-secondary: #64748b;
+    --border: #e2e8f0;
+    --accent: #6366f1;
+    --accent-light: #eef2ff;
+    --radius: 20px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Header */
+header {
+    padding: 32px 0 24px;
+}
+
+.header-row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+}
+
+header h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--text);
+}
+
+header .subtitle {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-top: 2px;
+}
+
+.source-pills {
+    display: flex;
+    gap: 6px;
+    background: var(--card);
+    padding: 4px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+}
+
+.pill {
+    padding: 6px 16px;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    font-family: inherit;
+    font-weight: 500;
+    color: var(--text-secondary);
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.pill:hover { color: var(--text); }
+.pill.active {
+    background: var(--accent);
+    color: white;
+    box-shadow: 0 2px 8px rgba(99,102,241,0.3);
+}
+
+/* Bento Grid */
+.bento-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: minmax(120px, auto);
+    gap: 14px;
+    margin: 20px 0;
+}
+
+.bento-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 24px;
+    border: 1px solid var(--border);
+    transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+    overflow: hidden;
+}
+
+.bento-card:hover {
+    box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+    transform: translateY(-2px);
+}
+
+/* Span classes */
+.span-2 { grid-column: span 2; }
+.span-3 { grid-column: span 3; }
+.span-4 { grid-column: span 4; }
+.row-2 { grid-row: span 2; }
+
+/* Hero stat card */
+.hero-stat {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.hero-stat .label {
+    font-size: 0.75rem;
+    opacity: 0.8;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.hero-stat .value {
+    font-size: 3rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin: 4px 0;
+}
+
+.hero-stat .sub {
+    font-size: 0.8rem;
+    opacity: 0.8;
+}
+
+/* Mini stat cards */
+.mini-stat {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.mini-stat .label {
+    font-size: 0.72rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.mini-stat .value {
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-top: 4px;
+}
+
+.mini-stat .sub {
+    font-size: 0.72rem;
+    color: var(--accent);
+    font-weight: 600;
+    margin-top: 2px;
+}
+
+/* Chart card */
+.chart-card h3 {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 16px;
+    font-weight: 600;
+}
+
+/* Filter card */
+.filter-card h3 {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+
+.search-input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-family: inherit;
+    outline: none;
+    background: var(--bg);
+    transition: all 0.2s;
+    margin-bottom: 10px;
+}
+
+.search-input:focus { border-color: var(--accent); }
+
+.category-pills {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.cat-pill {
+    padding: 5px 14px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-family: inherit;
+    background: white;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.cat-pill:hover { border-color: var(--accent); color: var(--accent); }
+.cat-pill.active { background: var(--accent-light); color: var(--accent); border-color: var(--accent); }
+
+/* Latest incident highlight */
+.latest-card {
+    background: linear-gradient(135deg, #fef2f2, #fff1f2);
+    border-color: #fecdd3;
+}
+
+.latest-card .latest-label {
+    font-size: 0.65rem;
+    color: #ef4444;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.latest-card h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.latest-card h3 a { color: var(--text); text-decoration: none; }
+.latest-card h3 a:hover { color: #ef4444; }
+
+.latest-card p {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.latest-card .meta {
+    margin-top: 12px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.meta-badge {
+    padding: 2px 10px;
+    border-radius: 6px;
+    font-size: 0.68rem;
+    font-weight: 600;
+    background: #ef4444;
+    color: white;
+}
+
+.meta-date { font-size: 0.72rem; color: var(--text-secondary); }
+
+/* Incident list section */
+.incidents-section {
+    margin: 14px 0 48px;
+}
+
+.incidents-section h2 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 14px;
+}
+
+.incident-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+}
+
+.incident-tile {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+}
+
+.incident-tile:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    transform: translateY(-1px);
+}
+
+.tile-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.category-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.dot-情報漏洩 { background: #ef4444; }
+.dot-悪用 { background: #8b5cf6; }
+.dot-障害 { background: #eab308; }
+.dot-安全性 { background: #f97316; }
+.dot-規制 { background: #3b82f6; }
+
+.tile-category { font-size: 0.7rem; color: var(--text-secondary); font-weight: 600; }
+.tile-date { font-size: 0.7rem; color: var(--text-secondary); margin-left: auto; }
+
+.incident-tile h4 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+    line-height: 1.4;
+}
+
+.incident-tile h4 a { color: var(--text); text-decoration: none; }
+.incident-tile h4 a:hover { color: var(--accent); }
+
+.incident-tile .preview { font-size: 0.78rem; color: var(--text-secondary); line-height: 1.5; }
+
+.toggle-btn {
+    background: none;
+    border: none;
+    color: var(--accent);
+    font-size: 0.75rem;
+    font-family: inherit;
+    cursor: pointer;
+    padding: 4px 0;
+    font-weight: 600;
+}
+
+.digest { margin-top: 10px; border-top: 1px solid var(--border); padding-top: 10px; }
+.digest-section { margin-bottom: 8px; }
+.digest-section h5 { font-size: 0.72rem; font-weight: 700; color: var(--accent); margin-bottom: 2px; }
+.digest-section p { font-size: 0.78rem; color: var(--text-secondary); line-height: 1.6; }
+.digest-section ul { margin: 0; padding-left: 16px; font-size: 0.78rem; color: var(--text-secondary); }
+
+/* Footer */
+footer {
+    padding: 24px 0;
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    border-top: 1px solid var(--border);
+}
+
+@media (max-width: 768px) {
+    .bento-grid { grid-template-columns: repeat(2, 1fr); }
+    .span-2, .span-3 { grid-column: span 2; }
+    .incident-list { grid-template-columns: 1fr; }
+    .source-pills { display: none; }
+}
+</style>
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <div class="header-row">
+            <div>
+                <h1>AI Incident News</h1>
+                <p class="subtitle">AIインシデント ニュースモニタリング</p>
+            </div>
+            <div class="source-pills">
+                <button class="pill active">デモ</button>
+                <button class="pill">Search</button>
+                <button class="pill">Alerts</button>
+                <button class="pill">両方</button>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+    <div class="bento-grid">
+        <!-- Hero stat -->
+        <div class="bento-card hero-stat">
+            <span class="label">総インシデント</span>
+            <span class="value">5</span>
+            <span class="sub">2026年3月</span>
+        </div>
+
+        <!-- Latest incident -->
+        <div class="bento-card span-2 latest-card">
+            <div class="latest-label">最新インシデント</div>
+            <h3><a href="#">ChatGPTの会話履歴が他ユーザーに表示されるバグが発覚</a></h3>
+            <p>OpenAIのChatGPTにおいて、一部ユーザーの会話タイトルが他のユーザーに表示される不具合が報告された。原因はRedisのキャッシュライブラリのバグ。</p>
+            <div class="meta">
+                <span class="meta-badge">情報漏洩</span>
+                <span class="meta-date">2026-03-10</span>
+            </div>
+        </div>
+
+        <!-- Mini stats -->
+        <div class="bento-card mini-stat">
+            <span class="label">カテゴリ</span>
+            <span class="value">5</span>
+            <span class="sub">分類済み</span>
+        </div>
+
+        <!-- Chart -->
+        <div class="bento-card span-2 chart-card">
+            <h3>カテゴリ分布</h3>
+            <canvas id="categoryChart" height="120"></canvas>
+        </div>
+
+        <!-- Filter -->
+        <div class="bento-card span-2 filter-card">
+            <h3>フィルター</h3>
+            <input type="text" class="search-input" placeholder="キーワードで検索...">
+            <div class="category-pills">
+                <button class="cat-pill active">すべて</button>
+                <button class="cat-pill">情報漏洩</button>
+                <button class="cat-pill">悪用</button>
+                <button class="cat-pill">障害</button>
+                <button class="cat-pill">安全性</button>
+                <button class="cat-pill">規制</button>
+            </div>
+        </div>
+    </div>
+
+    <section class="incidents-section">
+        <h2>インシデント一覧</h2>
+        <div class="incident-list">
+            <article class="incident-tile">
+                <div class="tile-header">
+                    <span class="category-dot dot-情報漏洩"></span>
+                    <span class="tile-category">情報漏洩</span>
+                    <span class="tile-date">2026-03-10</span>
+                </div>
+                <h4><a href="#">ChatGPTの会話履歴が他ユーザーに表示されるバグが発覚</a></h4>
+                <p class="preview">OpenAIのChatGPTにおいて、一部ユーザーの会話タイトルが他のユーザーに表示される不具合が報告された...</p>
+                <button class="toggle-btn" onclick="toggleDigest(this)">詳細を表示</button>
+                <div class="digest" style="display:none">
+                    <div class="digest-section"><h5>要約</h5><p>Redis-pyのバグにより約1.2%のユーザーが影響。</p></div>
+                    <div class="digest-section"><h5>対策</h5><ul><li>AIチャットツール利用ガイドラインの策定</li><li>機密情報入力の運用ルール徹底</li></ul></div>
+                </div>
+            </article>
+            <article class="incident-tile">
+                <div class="tile-header">
+                    <span class="category-dot dot-悪用"></span>
+                    <span class="tile-category">悪用</span>
+                    <span class="tile-date">2026-03-08</span>
+                </div>
+                <h4><a href="#">ディープフェイク音声を使った詐欺事件が急増</a></h4>
+                <p class="preview">AI音声クローニング技術を悪用し、企業幹部の声を模倣して送金指示を出す詐欺事件が複数報告された...</p>
+            </article>
+            <article class="incident-tile">
+                <div class="tile-header">
+                    <span class="category-dot dot-障害"></span>
+                    <span class="tile-category">障害</span>
+                    <span class="tile-date">2026-03-05</span>
+                </div>
+                <h4><a href="#">自動運転車のAIシステム障害で緊急停止が多発</a></h4>
+                <p class="preview">特定の気象条件下でAI認識システムが誤作動し緊急停止する事象が多発...</p>
+            </article>
+            <article class="incident-tile">
+                <div class="tile-header">
+                    <span class="category-dot dot-安全性"></span>
+                    <span class="tile-category">安全性</span>
+                    <span class="tile-date">2026-03-03</span>
+                </div>
+                <h4><a href="#">AIによるフィッシングメールが従来型を上回る成功率</a></h4>
+                <p class="preview">AI生成フィッシングメールのクリック率が従来の手動作成メールを大幅に上回ることが判明...</p>
+            </article>
+            <article class="incident-tile">
+                <div class="tile-header">
+                    <span class="category-dot dot-規制"></span>
+                    <span class="tile-category">規制</span>
+                    <span class="tile-date">2026-03-01</span>
+                </div>
+                <h4><a href="#">EU AI法の施行でハイリスクAIの登録義務が開始</a></h4>
+                <p class="preview">EU AI法の段階的施行が進み、ハイリスクAIシステムの事前登録義務が正式に開始された...</p>
+            </article>
+        </div>
+    </section>
+</main>
+
+<footer><div class="container"><p>&copy; 2026 AIbird</p></div></footer>
+
+<script>
+function toggleDigest(btn) {
+    var digest = btn.parentElement.querySelector('.digest');
+    var preview = btn.parentElement.querySelector('.preview');
+    if (!digest) return;
+    if (digest.style.display === 'none') {
+        digest.style.display = '';
+        if (preview) preview.style.display = 'none';
+        btn.textContent = '詳細を閉じる';
+    } else {
+        digest.style.display = 'none';
+        if (preview) preview.style.display = '';
+        btn.textContent = '詳細を表示';
+    }
+}
+
+new Chart(document.getElementById('categoryChart'), {
+    type: 'bar',
+    data: {
+        labels: ['情報漏洩', '悪用', '障害', '安全性', '規制'],
+        datasets: [{
+            data: [1, 1, 1, 1, 1],
+            backgroundColor: ['#ef4444', '#8b5cf6', '#eab308', '#f97316', '#3b82f6'],
+            borderRadius: 10,
+            borderSkipped: false,
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+            y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: '#f1f5f9' } },
+            x: { grid: { display: false } }
+        }
+    }
+});
+</script>
+</body>
+</html>
