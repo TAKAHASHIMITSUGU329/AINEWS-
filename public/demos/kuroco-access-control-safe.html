@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AiNEWS Kuroco Access Demo Safe Preview</title>
+  <style>
+    :root {
+      --ink: #172033;
+      --muted: #64748b;
+      --line: #d9e2ec;
+      --bg: #f6f8fb;
+      --panel: #ffffff;
+      --blue: #2563eb;
+      --green: #0f766e;
+      --gold: #b7791f;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", "YuGothic", "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.7;
+    }
+
+    .bar {
+      background: #172033;
+      color: #fff;
+      padding: 12px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .bar-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      display: inline-block;
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 999px;
+      padding: 3px 10px;
+      font-size: 12px;
+      color: #bfdbfe;
+      margin-right: 8px;
+    }
+
+    button {
+      appearance: none;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      border-radius: 8px;
+      padding: 9px 14px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .bar button {
+      border-color: rgba(255,255,255,0.28);
+      background: transparent;
+      color: #fff;
+    }
+
+    .bar button.active {
+      background: var(--blue);
+      border-color: var(--blue);
+    }
+
+    main {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 32px 20px 60px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 20px;
+      align-items: stretch;
+      margin-bottom: 20px;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 24px;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: 32px;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      margin: 0 0 14px;
+      font-size: 22px;
+      letter-spacing: 0;
+    }
+
+    p {
+      margin: 0 0 12px;
+      color: var(--muted);
+    }
+
+    .notice {
+      border-left: 5px solid var(--green);
+      background: #eef8f6;
+      border-radius: 6px;
+      padding: 14px 16px;
+      color: var(--ink);
+      font-weight: 700;
+      margin-top: 14px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+      min-height: 210px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .label {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 3px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    .free {
+      background: var(--green);
+    }
+
+    .paid {
+      background: var(--gold);
+    }
+
+    .admin {
+      background: var(--blue);
+    }
+
+    .locked .body {
+      filter: blur(5px);
+      user-select: none;
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,0.5), rgba(255,255,255,0.96));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      text-align: center;
+      font-weight: 800;
+      color: #92400e;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+      background: #fff;
+    }
+
+    th,
+    td {
+      border: 1px solid var(--line);
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #edf2f7;
+    }
+
+    @media (max-width: 860px) {
+      .hero,
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bar">
+    <div class="bar-inner">
+      <div><span class="badge">Safe Preview</span> Kuroco会員制デモ 公開安全版</div>
+      <div>
+        <button data-role="guest" class="active">未ログイン</button>
+        <button data-role="free">無料会員</button>
+        <button data-role="paid">有料会員</button>
+        <button data-role="admin">管理者</button>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <section class="hero">
+      <div class="panel">
+        <h1>AiNEWS × Kuroco<br>アクセス制御デモ</h1>
+        <p>実際のKuroco APIや認証情報を使わず、会員ランクごとの表示制御だけを再現した公開用デモです。</p>
+        <div class="notice" id="status">現在: 未ログイン。無料記事だけを表示します。</div>
+      </div>
+      <div class="panel">
+        <h2>確認できること</h2>
+        <p>無料コンテンツ、有料会員限定コンテンツ、管理者向け状態の出し分け。</p>
+        <p>本番ではKurocoの会員グループ、API、アクセストークンを使って同じ考え方を実装します。</p>
+      </div>
+    </section>
+
+    <section class="grid" id="cards"></section>
+
+    <section class="panel" style="margin-top:20px;">
+      <h2>実装イメージ</h2>
+      <table>
+        <thead>
+          <tr><th>画面側</th><th>Kuroco側</th><th>役割</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>未ログイン</td><td>公開コンテンツAPI</td><td>ニュース要約、無料記事、登録導線を表示</td></tr>
+          <tr><td>無料会員</td><td>無料会員グループ</td><td>無料記事、簡易診断、アップセル導線を表示</td></tr>
+          <tr><td>有料会員</td><td>有料会員グループ</td><td>詳細分析、PDF、SCS診断、7ツールを表示</td></tr>
+          <tr><td>管理者</td><td>管理者グループ</td><td>全コンテンツ確認、公開前チェックに利用</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <script>
+    const content = [
+      {
+        tier: "free",
+        title: "今週のAIインシデント3選",
+        body: "生成AIの誤回答、情報漏洩、規制動向を3行要約で確認できます。"
+      },
+      {
+        tier: "paid",
+        title: "詳細分析: 自社への影響と対策",
+        body: "原因、想定被害、チェックリスト、経営者向けアクションをまとめます。"
+      },
+      {
+        tier: "paid",
+        title: "SCS対応度チェッカー",
+        body: "30問診断、スコアリング、未対応項目、PDFレポート出力まで行います。"
+      },
+      {
+        tier: "free",
+        title: "無料SCS簡易チェック",
+        body: "5問だけでサプライチェーンセキュリティ対応の入口を確認します。"
+      },
+      {
+        tier: "paid",
+        title: "月次PDFレポート",
+        body: "カテゴリ別件数、重要度、エグゼクティブサマリー、アクションTOP5を提供します。"
+      },
+      {
+        tier: "admin",
+        title: "管理者プレビュー",
+        body: "公開前の無料・有料コンテンツの見え方をまとめて確認します。"
+      }
+    ];
+
+    const labels = {
+      guest: "未ログイン",
+      free: "無料会員",
+      paid: "有料会員",
+      admin: "管理者"
+    };
+
+    function canSee(role, tier) {
+      if (tier === "free") return true;
+      if (role === "admin") return true;
+      if (tier === "paid") return role === "paid";
+      if (tier === "admin") return role === "admin";
+      return false;
+    }
+
+    function render(role) {
+      const cards = document.getElementById("cards");
+      cards.innerHTML = content.map(item => {
+        const visible = canSee(role, item.tier);
+        const label = item.tier === "free" ? "無料公開" : item.tier === "paid" ? "有料会員限定" : "管理者";
+        return `
+          <article class="card ${visible ? "" : "locked"}">
+            <span class="label ${item.tier}">${label}</span>
+            <div class="body">
+              <h2>${item.title}</h2>
+              <p>${item.body}</p>
+            </div>
+            ${visible ? "" : '<div class="overlay">この続きは有料会員限定</div>'}
+          </article>
+        `;
+      }).join("");
+
+      document.getElementById("status").textContent =
+        `現在: ${labels[role]}。${role === "admin" ? "全コンテンツを確認できます。" : role === "paid" ? "有料コンテンツまで表示します。" : "無料記事とアップセル導線を表示します。"}`;
+
+      document.querySelectorAll("button[data-role]").forEach(button => {
+        button.classList.toggle("active", button.dataset.role === role);
+      });
+    }
+
+    document.querySelectorAll("button[data-role]").forEach(button => {
+      button.addEventListener("click", () => render(button.dataset.role));
+    });
+
+    render("guest");
+  </script>
+</body>
+</html>
