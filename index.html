@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AiNEWS KurocoFront</title>
+  <style>
+    :root {
+      --ink: #172033;
+      --muted: #64748b;
+      --line: #d9e2ec;
+      --bg: #f6f8fb;
+      --panel: #ffffff;
+      --blue: #2563eb;
+      --green: #0f766e;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", "YuGothic", "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.7;
+    }
+    main {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 44px 20px 64px;
+    }
+    .hero, .section, .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+    .hero {
+      padding: 34px;
+      border-top: 6px solid var(--green);
+      margin-bottom: 20px;
+    }
+    .eyebrow {
+      color: var(--green);
+      font-weight: 800;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+    h1 {
+      margin: 0 0 12px;
+      font-size: 36px;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+    p {
+      margin: 0;
+      color: var(--muted);
+    }
+    .section {
+      padding: 26px;
+      margin-top: 18px;
+    }
+    h2 {
+      margin: 0 0 14px;
+      font-size: 24px;
+      letter-spacing: 0;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .card {
+      padding: 20px;
+      min-height: 170px;
+    }
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+    }
+    .card a {
+      display: inline-block;
+      margin-top: 14px;
+      color: var(--blue);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .card a:hover { text-decoration: underline; }
+    .notice {
+      margin-top: 18px;
+      border-left: 5px solid var(--blue);
+      background: #edf4ff;
+      border-radius: 6px;
+      padding: 14px 16px;
+      color: var(--ink);
+      font-weight: 700;
+    }
+    @media (max-width: 820px) {
+      .grid { grid-template-columns: 1fr; }
+      h1 { font-size: 30px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="hero">
+      <div class="eyebrow">KurocoFront Deployment Preview</div>
+      <h1>AiNEWS<br>KurocoFrontトップページ</h1>
+      <p>AiNEWSの宿題回答資料と公開デモへのリンクをまとめた、KurocoFront表示確認用のトップページです。</p>
+      <div class="notice">このページが表示されれば、KurocoFrontへの静的ファイルデプロイは成功です。</div>
+    </section>
+
+    <section class="section">
+      <h2>主要リンク</h2>
+      <div class="grid">
+        <article class="card">
+          <h3>宿題回答資料</h3>
+          <p>無料配信、Kuroco、Resend、代替サービス、SCS対応アプリ案を整理した資料です。</p>
+          <a href="/public/homework/2026-06-05-takahashi-homework.html">開く</a>
+        </article>
+        <article class="card">
+          <h3>Kurocoアクセス制御デモ</h3>
+          <p>認証情報を含まない公開安全版の会員ランク別表示デモです。</p>
+          <a href="/public/demos/kuroco-access-control-safe.html">開く</a>
+        </article>
+        <article class="card">
+          <h3>UIサンプル</h3>
+          <p>Dashboard / Glassmorphism / Darkmode / Bento / Minimal のUI検討ページです。</p>
+          <a href="/public/demos/ui/01_dashboard.html">開く</a>
+        </article>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
