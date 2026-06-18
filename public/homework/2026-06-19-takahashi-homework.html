@@ -1,0 +1,746 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>2026/06/19 高橋宿題回答 - AI課金・Kuroco構成</title>
+  <style>
+    :root {
+      --bg: #f7f8fb;
+      --panel: #ffffff;
+      --ink: #182230;
+      --muted: #5d6979;
+      --line: #d9e0ea;
+      --navy: #213a5b;
+      --teal: #087f7a;
+      --blue: #2563eb;
+      --amber: #b76e00;
+      --red: #b42318;
+      --soft-teal: #e9f7f5;
+      --soft-blue: #edf4ff;
+      --soft-amber: #fff6e6;
+      --soft-red: #fff0ee;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--bg);
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", "YuGothic", "Segoe UI", sans-serif;
+      line-height: 1.7;
+    }
+
+    a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .shell {
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 32px 0 56px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(300px, 0.75fr);
+      gap: 18px;
+      align-items: stretch;
+      margin-bottom: 18px;
+    }
+
+    .hero-main,
+    .hero-side,
+    .section,
+    .mini-card,
+    .flow-step {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    .hero-main {
+      padding: 30px;
+      border-top: 6px solid var(--navy);
+    }
+
+    .hero-side {
+      padding: 24px;
+      border-top: 6px solid var(--teal);
+    }
+
+    .eyebrow {
+      color: var(--teal);
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    h1,
+    h2,
+    h3 {
+      color: var(--navy);
+      letter-spacing: 0;
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: 34px;
+      line-height: 1.25;
+    }
+
+    h2 {
+      margin: 0 0 14px;
+      font-size: 22px;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 17px;
+    }
+
+    p {
+      margin: 0 0 10px;
+    }
+
+    ul {
+      margin: 8px 0 0;
+      padding-left: 22px;
+    }
+
+    li {
+      margin: 4px 0;
+    }
+
+    .lead {
+      color: var(--muted);
+      font-size: 17px;
+      max-width: 760px;
+    }
+
+    .meta {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .meta div {
+      background: #fbfcfe;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px 12px;
+      min-width: 0;
+    }
+
+    .meta strong {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 2px;
+    }
+
+    .hero-side ol {
+      margin: 10px 0 0;
+      padding-left: 22px;
+    }
+
+    .hero-side li {
+      margin: 8px 0;
+      font-weight: 700;
+    }
+
+    .section {
+      padding: 26px;
+      margin-top: 18px;
+    }
+
+    .note {
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 8px;
+    }
+
+    .callout {
+      margin-top: 16px;
+      padding: 15px 17px;
+      border-radius: 8px;
+      border-left: 5px solid var(--teal);
+      background: var(--soft-teal);
+      font-weight: 700;
+    }
+
+    .callout.warning {
+      border-left-color: var(--amber);
+      background: var(--soft-amber);
+    }
+
+    .callout.risk {
+      border-left-color: var(--red);
+      background: var(--soft-red);
+    }
+
+    .executive-summary {
+      border-top: 6px solid var(--teal);
+    }
+
+    .answer-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .answer-card {
+      background: #fbfcfe;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+      min-width: 0;
+    }
+
+    .answer-card h3 {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .question {
+      margin-top: 10px;
+      padding: 12px 14px;
+      border-radius: 8px;
+      background: var(--soft-blue);
+      color: var(--navy);
+      font-weight: 700;
+    }
+
+    .answer {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 8px;
+      background: var(--soft-teal);
+      border-left: 5px solid var(--teal);
+      font-weight: 700;
+    }
+
+    .grid-2,
+    .grid-3 {
+      display: grid;
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .grid-2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .mini-card {
+      padding: 18px;
+      min-width: 0;
+    }
+
+    .mini-card .label {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      border-radius: 999px;
+      padding: 2px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #ffffff;
+      background: var(--teal);
+      margin-bottom: 10px;
+    }
+
+    .mini-card .label.blue {
+      background: var(--blue);
+    }
+
+    .mini-card .label.amber {
+      background: var(--amber);
+    }
+
+    .mini-card .label.red {
+      background: var(--red);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 14px;
+      overflow-wrap: anywhere;
+    }
+
+    th,
+    td {
+      border: 1px solid var(--line);
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #edf2f7;
+      color: var(--navy);
+      font-size: 14px;
+    }
+
+    td {
+      background: #ffffff;
+    }
+
+    .num {
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 24px;
+      border-radius: 999px;
+      padding: 2px 10px;
+      color: #ffffff;
+      background: var(--teal);
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .badge.blue {
+      background: var(--blue);
+    }
+
+    .badge.amber {
+      background: var(--amber);
+    }
+
+    .badge.red {
+      background: var(--red);
+    }
+
+    .architecture {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .flow-step {
+      padding: 14px;
+      min-height: 142px;
+      position: relative;
+      background: #fbfcfe;
+    }
+
+    .flow-step strong {
+      display: block;
+      color: var(--navy);
+      margin-bottom: 6px;
+    }
+
+    .flow-step p {
+      color: var(--muted);
+      font-size: 13px;
+      margin: 0;
+    }
+
+    .flow-step::after {
+      content: ">";
+      position: absolute;
+      top: 50%;
+      right: -9px;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .flow-step:last-child::after {
+      display: none;
+    }
+
+    .sources {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .sources li {
+      margin: 3px 0;
+    }
+
+    .footer {
+      color: var(--muted);
+      font-size: 13px;
+      text-align: right;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 960px) {
+      .hero,
+      .answer-grid,
+      .grid-2,
+      .grid-3,
+      .architecture {
+        grid-template-columns: 1fr;
+      }
+
+      .meta {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .flow-step::after {
+        display: none;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .shell {
+        width: min(100% - 24px, 1180px);
+        padding-top: 18px;
+      }
+
+      .hero-main,
+      .hero-side,
+      .section {
+        padding: 18px;
+      }
+
+      h1 {
+        font-size: 27px;
+      }
+
+      .lead {
+        font-size: 15px;
+      }
+
+      .meta {
+        grid-template-columns: 1fr;
+      }
+
+      th,
+      td {
+        padding: 9px 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <div class="hero-main">
+        <div class="eyebrow">2026年6月19日 MTG 提出用</div>
+        <h1>高橋宿題回答<br>AI課金設計とKuroco有料アプリ構成</h1>
+        <p class="lead">6月5日のMTGで出た宿題を、「AIを使う有料サービスはいくらで、何回まで使わせれば赤字にならないか」と「Kurocoを中心に、AI処理やPDF生成をどこに置くか」に絞って整理しました。</p>
+        <div class="meta">
+          <div><strong>担当</strong>高橋</div>
+          <div><strong>対象</strong>AIニュース / SCS</div>
+          <div><strong>提出日</strong>2026/06/19</div>
+          <div><strong>結論</strong>Kuroco + 外部API</div>
+        </div>
+      </div>
+      <aside class="hero-side">
+        <h2>本日の回答</h2>
+        <ol>
+          <li>無料は静的HTMLとメール配信まで</li>
+          <li>AI検索・PDF生成・診断は有料化</li>
+          <li>Kurocoは会員管理とCMSに集中</li>
+          <li>AI処理はFastAPIを外部ホスティング</li>
+          <li>使いすぎ防止は月間クォータで管理</li>
+        </ol>
+      </aside>
+    </section>
+
+    <section class="section executive-summary">
+      <h2>エグゼクティブサマリ: 前回宿題と回答</h2>
+      <p>前回MTGでの高橋担当の宿題は、大きく2つです。水野さんへの回答としては、以下の方針で整理しました。</p>
+      <div class="answer-grid">
+        <article class="answer-card">
+          <h3><span class="badge blue">宿題1</span>Kurocoでどこまでやるか</h3>
+          <div class="question">問い: Kuroco単独で有料アプリまで完結できるのか。フロント/バックエンドはどう分けるべきか。</div>
+          <div class="answer">回答: Kurocoは会員管理・CMS・無料/有料の出し分けに集中させ、Gemini API実行、Google Search API実行、PDF生成、利用回数制限は外部バックエンドで行う構成が現実的です。</div>
+          <ul>
+            <li>Kuroco: ログイン、会員ランク、記事CMS、表示制御</li>
+            <li>FastAPI: AI検索、要約、PDF生成、月間クォータ管理</li>
+            <li>初期MVP: Kuroco + Resend + Railway上のFastAPI</li>
+          </ul>
+        </article>
+        <article class="answer-card">
+          <h3><span class="badge amber">宿題2</span>AI課金が青天井にならない方程式</h3>
+          <div class="question">問い: 有料サービスでAI/API利用料が膨らみ続けないよう、どう料金設計・利用制限するか。</div>
+          <div class="answer">回答: 使い放題にせず、プランごとにAI検索回数、PDF生成回数、SCS診断回数の月間上限を置きます。原価は「利用回数 x 1回あたりAPI原価」で管理し、月額料金が上限原価を上回るように設計します。</div>
+          <ul>
+            <li>月間API原価 = 検索回数 x 検索原価 + PDF回数 x PDF原価 + 診断回数 x 診断原価 + 固定費按分</li>
+            <li>月額料金 >= 月間API原価 + サポート原価 + 利益</li>
+            <li>上限到達時は翌月リセット、または追加購入にする</li>
+          </ul>
+        </article>
+      </div>
+      <div class="callout">水野さんへの一言回答: 「無料は静的、有料は動的AI機能。Kurocoは入口と会員制御、AI処理は外部バックエンド。課金は月間クォータ制で青天井を防ぎます。」</div>
+    </section>
+
+    <section class="section">
+      <h2>結論サマリ</h2>
+      <div class="grid-3">
+        <article class="mini-card">
+          <span class="label">無料領域</span>
+          <h3>AIを動かさないもの</h3>
+          <p>週次メール、静的なAIニュース、固定チェックリスト、SCS制度の解説記事は無料で提供する。目的は集客と信頼形成。</p>
+        </article>
+        <article class="mini-card">
+          <span class="label blue">有料領域</span>
+          <h3>AIと検索APIを動かすもの</h3>
+          <p>期間指定検索、キーワード検索、PDFレポート生成、SCS診断の個別レポートは従量課金が発生するため有料会員向けにする。</p>
+        </article>
+        <article class="mini-card">
+          <span class="label amber">技術構成</span>
+          <h3>Kuroco + 外部アプリ</h3>
+          <p>Kurocoはログイン、会員ランク、記事CMS、表示制御を担当。AI処理、PDF生成、利用回数制限はFastAPI側で管理する。</p>
+        </article>
+      </div>
+      <div class="callout">提案: 初期MVPは「Kuroco会員サイト + Resendメール + Railway上のFastAPI」で始める。Cloudflare Workersは軽量APIや将来の分散構成で検討。</div>
+    </section>
+
+    <section class="section">
+      <h2>宿題1: AI課金と有料プラン設計</h2>
+      <p>AI利用は、主に「Google Search / Gemini Grounding」「Gemini要約」「PDF生成時のエグゼクティブサマリー」でコストが発生します。料金は変更されるため、下記は2026年6月時点の公開価格をもとにした概算です。</p>
+      <table>
+        <thead>
+          <tr><th>コスト項目</th><th>公開価格の目安</th><th>AiNEWSでの発生箇所</th><th>管理方針</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Google Custom Search JSON API</td><td>$5 / 1,000 queries</td><td>検索APIでニュース候補を取得する場合</td><td>1ユーザーあたり月間検索回数を制限</td></tr>
+          <tr><td>Gemini Grounding with Google Search</td><td>Gemini 3系は月5,000 search queries無料、その後 $14 / 1,000 search queries</td><td>Gemini Search Groundingで記事検索・根拠付き生成をする場合</td><td>プロジェクト全体の月間上限を設定</td></tr>
+          <tr><td>Gemini Flash系の入出力トークン</td><td>モデルにより $0.125〜$0.25 / 100万入力token、$0.75〜$1.50 / 100万出力token など</td><td>記事要約、分類、アクション生成、PDF要約</td><td>1回あたり最大記事数と最大出力文字数を制限</td></tr>
+          <tr><td>Resendメール</td><td>Free: 100通/日、Pro: $20/月で50,000通/月</td><td>週次ニュース、月次レポート通知、登録通知</td><td>100人超の配信からPro移行を検討</td></tr>
+          <tr><td>外部ホスティング</td><td>Railwayは小規模なら低額開始、Cloudflare Workers Paidは$5/月から</td><td>FastAPI、PDF生成、クォータDB、Webhook</td><td>初期は月$5〜$20台を想定して固定費化</td></tr>
+        </tbody>
+      </table>
+      <p class="note">計算用の暫定為替: 1 USD = 150円。実際の請求時は決済時レートで再計算します。</p>
+    </section>
+
+    <section class="section">
+      <h2>1回あたりコスト試算</h2>
+      <p>厳密な原価は実行時の検索回数、記事数、トークン量で変わります。まずは月額プランを設計するため、保守的に「1検索=数円〜十数円」「PDF生成=数十円」を上限目安として置きます。</p>
+      <table>
+        <thead>
+          <tr><th>機能</th><th>想定処理</th><th>変動費の目安</th><th>設計上の扱い</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>AIニュース検索 1回</td><td>検索1回 + 10〜15件の要約・分類</td><td>約3〜20円</td><td>月間回数制限の対象</td></tr>
+          <tr><td>期間指定/キーワード検索 1回</td><td>ユーザー入力で検索API再実行</td><td>約3〜25円</td><td>無料には出さない</td></tr>
+          <tr><td>月次PDFレポート 1回</td><td>記事集計 + Gemini要約 + PDF生成</td><td>約20〜80円</td><td>ライト以上で月1回、上位は複数回</td></tr>
+          <tr><td>SCS診断レポート 1回</td><td>回答内容から改善ToDoと文書案を生成</td><td>約10〜50円</td><td>無料は簡易結果、有料は詳細PDF</td></tr>
+          <tr><td>週次メール 1通</td><td>作成済みHTMLを配信</td><td>Resend無料枠内なら0円</td><td>100人までは無料枠で検証</td></tr>
+        </tbody>
+      </table>
+      <div class="callout warning">重要: 「何回でも検索可能」にすると原価が読めません。月額制にする場合は、検索回数・PDF生成回数・診断レポート回数の3つを必ず制限します。</div>
+    </section>
+
+    <section class="section">
+      <h2>有料プラン案</h2>
+      <table>
+        <thead>
+          <tr><th>プラン</th><th>月額案</th><th>対象</th><th>主な機能</th><th>利用上限</th><th>狙い</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge">無料</span></td>
+            <td class="num">0円</td>
+            <td>見込み客</td>
+            <td>週次メール、静的AIニュース、SCS簡易チェック、制度解説記事</td>
+            <td>AI検索なし、PDFなし</td>
+            <td>メール登録と信頼形成</td>
+          </tr>
+          <tr>
+            <td><span class="badge blue">ライト</span></td>
+            <td class="num">980円〜1,480円</td>
+            <td>個人事業主・小規模事業者</td>
+            <td>AIニュース検索、基本フィルター、月次PDF</td>
+            <td>検索 月20回、PDF 月1回、SCS詳細診断 月1回</td>
+            <td>低価格の入口商品</td>
+          </tr>
+          <tr>
+            <td><span class="badge amber">スタンダード</span></td>
+            <td class="num">2,980円〜4,980円</td>
+            <td>中小企業</td>
+            <td>詳細検索、月次PDF、SCS診断、改善ToDo、CSV出力</td>
+            <td>検索 月100回、PDF 月3回、SCS詳細診断 月5回</td>
+            <td>推奨プラン。原価と価値のバランスが良い</td>
+          </tr>
+          <tr>
+            <td><span class="badge red">ビジネス</span></td>
+            <td class="num">9,800円〜29,800円</td>
+            <td>複数担当者が使う会社</td>
+            <td>複数ユーザー、履歴保存、チーム管理、優先サポート</td>
+            <td>検索 月500回、PDF 月10回、SCS詳細診断 月20回</td>
+            <td>SCS支援やワンショット相談へつなげる</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="callout">回答方針: 最初から「使い放題」は出さず、スタンダードプランを中心に置く。ライトは入口、ビジネスは相談・個別支援への導線にする。</div>
+    </section>
+
+    <section class="section">
+      <h2>使いすぎ防止の仕組み</h2>
+      <div class="grid-2">
+        <article class="mini-card">
+          <span class="label red">必須</span>
+          <h3>月間クォータ</h3>
+          <ul>
+            <li>検索回数、PDF生成回数、診断レポート回数をユーザー単位で記録</li>
+            <li>毎月1日に自動リセット</li>
+            <li>上限到達時は「翌月まで待つ」または「追加購入」</li>
+          </ul>
+        </article>
+        <article class="mini-card">
+          <span class="label blue">推奨</span>
+          <h3>システム全体の上限</h3>
+          <ul>
+            <li>Google Cloud側で予算アラートを設定</li>
+            <li>APIキーはサーバー側だけに置く</li>
+            <li>異常な連続実行はレート制限で止める</li>
+          </ul>
+        </article>
+      </div>
+      <table>
+        <thead>
+          <tr><th>管理対象</th><th>保存する値</th><th>実装場所</th><th>ユーザー表示</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>AI検索</td><td>user_id, month, search_count</td><td>FastAPI + SQLite/Postgres</td><td>今月 12 / 20回</td></tr>
+          <tr><td>PDF生成</td><td>user_id, month, pdf_count</td><td>FastAPI + SQLite/Postgres</td><td>今月 1 / 1回</td></tr>
+          <tr><td>SCS診断</td><td>user_id, month, scs_report_count</td><td>FastAPI + SQLite/Postgres</td><td>今月 0 / 1回</td></tr>
+          <tr><td>短時間連打</td><td>user_id, endpoint, timestamp</td><td>FastAPI middleware</td><td>少し待って再実行</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <h2>宿題2: Kurocoでできること / 外部が必要なこと</h2>
+      <table>
+        <thead>
+          <tr><th>機能</th><th>Kuroco単独</th><th>外部アプリ必要性</th><th>判断</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>会員登録・ログイン</td><td>可能</td><td>低</td><td>Kuroco担当</td></tr>
+          <tr><td>無料/有料コンテンツの出し分け</td><td>可能</td><td>低</td><td>Kuroco担当</td></tr>
+          <tr><td>記事CMS・ニュースページ管理</td><td>可能</td><td>低</td><td>Kuroco担当</td></tr>
+          <tr><td>静的HTMLの表示</td><td>可能</td><td>低</td><td>Kurocoまたは静的ホスティング</td></tr>
+          <tr><td>Gemini API実行</td><td>非推奨</td><td>高</td><td>FastAPI担当。APIキーをブラウザに出さない</td></tr>
+          <tr><td>Google Search API実行</td><td>非推奨</td><td>高</td><td>FastAPI担当。検索回数を記録</td></tr>
+          <tr><td>PDF生成</td><td>難しい</td><td>高</td><td>FastAPI担当。既存AiNEWS機能を活用</td></tr>
+          <tr><td>利用回数制限</td><td>難しい</td><td>高</td><td>FastAPI + DB担当</td></tr>
+          <tr><td>メール配信</td><td>限定的</td><td>中</td><td>Resend担当。Kurocoの会員情報と連携</td></tr>
+        </tbody>
+      </table>
+      <div class="callout risk">結論: Kurocoのコンテンツ内にAI APIキーを埋め込む構成は避けます。有料AI機能は必ずサーバー側で実行し、会員権限と利用回数を確認してからAPIを呼びます。</div>
+    </section>
+
+    <section class="section">
+      <h2>推奨アーキテクチャ</h2>
+      <div class="architecture">
+        <div class="flow-step">
+          <strong>1. ユーザー</strong>
+          <p>メールや検索からKuroco上のAIニュースページへアクセス。</p>
+        </div>
+        <div class="flow-step">
+          <strong>2. Kuroco</strong>
+          <p>ログイン、会員ランク、無料/有料表示を制御。</p>
+        </div>
+        <div class="flow-step">
+          <strong>3. フロントHTML</strong>
+          <p>検索フォーム、期間指定、PDFボタンを表示。</p>
+        </div>
+        <div class="flow-step">
+          <strong>4. FastAPI</strong>
+          <p>会員権限、月間クォータ、API実行、PDF生成を担当。</p>
+        </div>
+        <div class="flow-step">
+          <strong>5. 外部API</strong>
+          <p>Gemini、Google Search、Resendをサーバー側から呼び出す。</p>
+        </div>
+      </div>
+      <table>
+        <thead>
+          <tr><th>候補</th><th>向いている用途</th><th>メリット</th><th>懸念</th><th>今回の判断</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Railway</td><td>FastAPI、PDF生成、DB付きアプリ</td><td>Python/FastAPIをそのまま置きやすい。AiNEWS既存構成と相性が良い</td><td>利用量で費用が変動する</td><td>初期MVPの本命</td></tr>
+          <tr><td>Cloudflare Workers / Pages</td><td>軽量API、認証中継、静的サイト</td><td>低額でスケールしやすい。Workers Paidは$5/月から</td><td>Python PDF生成や重い処理には向きにくい</td><td>将来の軽量化候補</td></tr>
+          <tr><td>Render</td><td>FastAPI、Docker、常時稼働Webサービス</td><td>構成が分かりやすい。Starter $7/月から</td><td>無料枠は本番向きではない</td><td>Railway代替</td></tr>
+          <tr><td>Kuroco単独</td><td>CMS、会員ページ、静的HTML</td><td>既存検証済み。日本語運用しやすい</td><td>AI APIキー管理、PDF生成、利用制限には弱い</td><td>会員・CMSに集中</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <h2>無料会員・有料会員・管理者の動線</h2>
+      <table>
+        <thead>
+          <tr><th>ユーザー種別</th><th>見えるもの</th><th>使える機能</th><th>次の導線</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>未ログイン</td><td>AIニュースの一部、SCS解説、登録フォーム</td><td>閲覧のみ</td><td>無料会員登録</td></tr>
+          <tr><td>無料会員</td><td>週次ニュース、静的記事、SCS簡易チェック</td><td>AI検索なし。簡易診断のみ</td><td>ライト/スタンダードへアップセル</td></tr>
+          <tr><td>有料会員</td><td>詳細ニュース、検索フォーム、PDF生成、SCS詳細診断</td><td>プランごとの月間上限内でAI機能を利用</td><td>個別相談、SCS取得支援</td></tr>
+          <tr><td>管理者</td><td>全コンテンツ、利用状況、配信管理</td><td>記事登録、会員確認、クォータ調整、レポート確認</td><td>運用改善</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <h2>明日のMTGでの説明台本</h2>
+      <div class="grid-2">
+        <article class="mini-card">
+          <span class="label">冒頭</span>
+          <h3>30秒サマリ</h3>
+          <p>「無料は静的コンテンツとメールまでにし、AI検索やPDF生成のようにAPI課金が発生するものは有料に切ります。Kurocoは会員管理とCMSに集中させ、AI処理は外部のFastAPIで安全に実行する構成が現実的です。」</p>
+        </article>
+        <article class="mini-card">
+          <span class="label blue">提案</span>
+          <h3>次に決めたいこと</h3>
+          <ul>
+            <li>最初に出す有料プランはライト/スタンダードの2段階でよいか</li>
+            <li>初期MVPのホスティングをRailwayで進めてよいか</li>
+            <li>SCS診断を最初の有料アプリにするか</li>
+          </ul>
+        </article>
+      </div>
+      <div class="callout">次アクション: まずは「Kurocoログイン済み有料会員だけがFastAPIのAI検索を呼べる」小さなプロトタイプを作り、月間クォータ管理まで検証します。</div>
+    </section>
+
+    <section class="section">
+      <h2>参考リンク</h2>
+      <ul class="sources">
+        <li><a href="https://ai.google.dev/gemini-api/docs/pricing">Gemini Developer API pricing</a></li>
+        <li><a href="https://developers.google.com/custom-search/docs/overview">Google Custom Search JSON API overview / pricing</a></li>
+        <li><a href="https://resend.com/pricing">Resend pricing</a></li>
+        <li><a href="https://kuroco.app/pricing/">Kuroco pricing</a></li>
+        <li><a href="https://railway.com/pricing">Railway pricing</a></li>
+        <li><a href="https://developers.cloudflare.com/workers/platform/pricing/">Cloudflare Workers pricing</a></li>
+        <li><a href="https://render.com/pricing">Render pricing</a></li>
+      </ul>
+    </section>
+
+    <p class="footer">作成: 高橋宿題回答案 / 2026年6月19日MTG向け</p>
+  </main>
+</body>
+</html>
