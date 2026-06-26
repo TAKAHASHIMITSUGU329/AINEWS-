@@ -1,0 +1,90 @@
+<mxfile host="app.diagrams.net" modified="2026-06-26T11:00:00.000Z" agent="Codex" version="24.7.17" type="device">
+  <diagram id="kuroco-cloudflare-mvp" name="Kuroco + Cloudflare MVP設計">
+    <mxGraphModel dx="1600" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="title" value="AIニュース / SCS 有料化 MVP設計&#xa;Kuroco + Cloudflare で軽量に開始、重い処理はFastAPIへ段階拡張" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontSize=26;fontStyle=1;fontColor=#213A5B;align=left;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="40" y="24" width="1030" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="meta" value="2026/06/26 11:00 MTG向け / 高橋案" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F7F5;strokeColor=#087F7A;fontSize=15;fontStyle=1;fontColor=#213A5B;" vertex="1" parent="1">
+          <mxGeometry x="1160" y="34" width="340" height="48" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="summary-title" value="エグゼクティブサマリ" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontSize=22;fontStyle=1;fontColor=#213A5B;align=left;" vertex="1" parent="1">
+          <mxGeometry x="40" y="120" width="260" height="36" as="geometry"/>
+        </mxCell>
+        <mxCell id="summary-1" value="宿題1: Kurocoでどこまでやるか&#xa;&#xa;回答: 初期MVPは Kuroco + Cloudflare で開始。&#xa;Kurocoは会員管理・CMS・無料/有料出し分けを担当。&#xa;Cloudflare Pagesは画面表示、Workersは軽量APIとGemini/Search API実行を担当。" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDF4FF;strokeColor=#2563EB;fontSize=15;fontColor=#182230;align=left;verticalAlign=top;spacing=14;" vertex="1" parent="1">
+          <mxGeometry x="40" y="164" width="700" height="150" as="geometry"/>
+        </mxCell>
+        <mxCell id="summary-2" value="宿題2: AI課金が青天井にならない方程式&#xa;&#xa;回答: 使い放題にしない。&#xa;AI検索回数、PDF生成回数、SCS診断回数に月間上限を設定。&#xa;月額料金 &gt;= 上限API原価 + サポート原価 + 利益 で設計。" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF6E6;strokeColor=#B76E00;fontSize=15;fontColor=#182230;align=left;verticalAlign=top;spacing=14;" vertex="1" parent="1">
+          <mxGeometry x="790" y="164" width="710" height="150" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="arch-title" value="初期MVPアーキテクチャ" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontSize=22;fontStyle=1;fontColor=#213A5B;align=left;" vertex="1" parent="1">
+          <mxGeometry x="40" y="350" width="320" height="36" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="user" value="ユーザー&#xa;未ログイン / 無料 / 有料 / 管理者" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#D9E0EA;fontSize=15;fontStyle=1;fontColor=#182230;" vertex="1" parent="1">
+          <mxGeometry x="50" y="420" width="190" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="kuroco" value="Kuroco&#xa;&#xa;会員登録・ログイン&#xa;会員ランク管理&#xa;記事CMS&#xa;無料/有料コンテンツ出し分け" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F7F5;strokeColor=#087F7A;fontSize=15;fontStyle=1;fontColor=#182230;verticalAlign=top;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="300" y="390" width="240" height="150" as="geometry"/>
+        </mxCell>
+        <mxCell id="pages" value="Cloudflare Pages&#xa;&#xa;フロント表示&#xa;検索フォーム&#xa;会員向けUI&#xa;静的ページ配信" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDF4FF;strokeColor=#2563EB;fontSize=15;fontStyle=1;fontColor=#182230;verticalAlign=top;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="610" y="390" width="240" height="150" as="geometry"/>
+        </mxCell>
+        <mxCell id="workers" value="Cloudflare Workers&#xa;&#xa;軽量API処理&#xa;APIキー保護&#xa;Gemini/Search API実行&#xa;簡易クォータ管理&#xa;Rate Limit" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF6E6;strokeColor=#B76E00;fontSize=15;fontStyle=1;fontColor=#182230;verticalAlign=top;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="920" y="390" width="260" height="160" as="geometry"/>
+        </mxCell>
+        <mxCell id="external" value="外部API / ストレージ&#xa;&#xa;Gemini API&#xa;Google Search API&#xa;Resend&#xa;Workers KV / D1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F7F8FB;strokeColor=#5D6979;fontSize=15;fontStyle=1;fontColor=#182230;verticalAlign=top;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1260" y="390" width="220" height="160" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="edge-user-kuroco" style="endArrow=block;html=1;rounded=0;strokeColor=#5D6979;strokeWidth=2;" edge="1" parent="1" source="user" target="kuroco">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge-kuroco-pages" value="認証状態 / 会員種別" style="endArrow=block;html=1;rounded=0;strokeColor=#087F7A;strokeWidth=2;fontSize=12;fontColor=#213A5B;" edge="1" parent="1" source="kuroco" target="pages">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge-pages-workers" value="有料AI機能の呼び出し" style="endArrow=block;html=1;rounded=0;strokeColor=#2563EB;strokeWidth=2;fontSize=12;fontColor=#213A5B;" edge="1" parent="1" source="pages" target="workers">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge-workers-external" value="サーバー側実行" style="endArrow=block;html=1;rounded=0;strokeColor=#B76E00;strokeWidth=2;fontSize=12;fontColor=#213A5B;" edge="1" parent="1" source="workers" target="external">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="fastapi" value="拡張段階: FastAPI / Railway / Render&#xa;&#xa;追加するタイミング:&#xa;・PDF生成が必要&#xa;・重いバッチ処理が必要&#xa;・複雑な月間クォータ管理が必要&#xa;・SCS詳細診断レポートが重くなる" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF0EE;strokeColor=#B42318;fontSize=15;fontStyle=1;fontColor=#182230;verticalAlign=top;spacing=12;" vertex="1" parent="1">
+          <mxGeometry x="920" y="610" width="560" height="150" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge-workers-fastapi" value="必要になった段階で追加" style="endArrow=block;html=1;rounded=0;strokeColor=#B42318;strokeWidth=2;dashed=1;fontSize=12;fontColor=#B42318;" edge="1" parent="1" source="workers" target="fastapi">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="scope-title" value="MVP範囲と段階拡張" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontSize=22;fontStyle=1;fontColor=#213A5B;align=left;" vertex="1" parent="1">
+          <mxGeometry x="40" y="610" width="320" height="36" as="geometry"/>
+        </mxCell>
+        <mxCell id="mvp-scope" value="初期MVPで実装する範囲&#xa;&#xa;1. Kuroco会員管理&#xa;2. 記事CMS / ニュース表示&#xa;3. 無料/有料コンテンツ出し分け&#xa;4. Cloudflare Pagesで画面表示&#xa;5. WorkersでGemini/Search API実行&#xa;6. 簡易的な利用回数管理" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F7F5;strokeColor=#087F7A;fontSize=15;fontColor=#182230;align=left;verticalAlign=top;spacing=14;" vertex="1" parent="1">
+          <mxGeometry x="50" y="660" width="370" height="190" as="geometry"/>
+        </mxCell>
+        <mxCell id="paid-scope" value="有料化する動的AI機能&#xa;&#xa;・AIニュース検索&#xa;・期間指定 / キーワード検索&#xa;・SCS詳細診断&#xa;・詳細レポート生成&#xa;・PDF生成は拡張段階で検討" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDF4FF;strokeColor=#2563EB;fontSize=15;fontColor=#182230;align=left;verticalAlign=top;spacing=14;" vertex="1" parent="1">
+          <mxGeometry x="470" y="660" width="370" height="190" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="quota-title" value="課金・クォータ制御" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontSize=22;fontStyle=1;fontColor=#213A5B;align=left;" vertex="1" parent="1">
+          <mxGeometry x="40" y="890" width="320" height="36" as="geometry"/>
+        </mxCell>
+        <mxCell id="formula" value="月間API原価 = AI検索回数 x 検索原価 + PDF生成回数 x PDF原価 + SCS診断回数 x 診断原価 + 固定費按分&#xa;&#xa;月額料金 &gt;= 月間API原価 + サポート原価 + 利益&#xa;&#xa;原則: 使い放題にせず、プランごとに月間上限を置く" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF6E6;strokeColor=#B76E00;fontSize=15;fontStyle=1;fontColor=#182230;align=left;verticalAlign=top;spacing=14;" vertex="1" parent="1">
+          <mxGeometry x="50" y="940" width="720" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="quota-table" value="クォータ例&#xa;&#xa;無料: AI検索なし / PDFなし&#xa;ライト: 検索20回 / PDF1回 / 診断1回&#xa;スタンダード: 検索100回 / PDF3回 / 診断5回&#xa;ビジネス: 検索500回 / PDF10回 / 診断20回&#xa;&#xa;上限到達時: 翌月リセット または 追加購入" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F7F8FB;strokeColor=#5D6979;fontSize=15;fontColor=#182230;align=left;verticalAlign=top;spacing=14;" vertex="1" parent="1">
+          <mxGeometry x="820" y="900" width="660" height="160" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="decision" value="本日の決めどころ&#xa;&#xa;初期MVPで何をやるかを先に絞り、その範囲がKuroco + Cloudflareで成立するか確認する。&#xa;成立する範囲で開始し、PDF生成・重い診断・複雑なクォータ管理が必要になった時点でFastAPIを追加する。" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#213A5B;strokeColor=#213A5B;fontSize=16;fontStyle=1;fontColor=#FFFFFF;align=left;verticalAlign=top;spacing=16;" vertex="1" parent="1">
+          <mxGeometry x="50" y="1080" width="1430" height="110" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
