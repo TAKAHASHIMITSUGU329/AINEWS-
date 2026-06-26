@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>2026/06/19 高橋宿題回答 - AI課金・Kuroco構成</title>
+  <title>2026/06/26 高橋宿題回答 - MVP構成・本日アジェンダ</title>
   <style>
     :root {
       --bg: #f7f8fb;
@@ -446,40 +446,41 @@
   <main class="shell">
     <section class="hero">
       <div class="hero-main">
-        <div class="eyebrow">2026年6月19日 MTG 提出用</div>
-        <h1>高橋宿題回答<br>AI課金設計とKuroco有料アプリ構成</h1>
-        <p class="lead">6月5日のMTGで出た宿題を、「AIを使う有料サービスはいくらで、何回まで使わせれば赤字にならないか」と「Kurocoを中心に、AI処理やPDF生成をどこに置くか」に絞って整理しました。</p>
+        <div class="eyebrow">2026年6月26日 11:00 MTG 提出用</div>
+        <h1>本日のアジェンダ<br>MVP構成とAI課金制御の再整理</h1>
+        <p class="lead">前回打ち合わせがスキップとなったため、6月5日の宿題に加えて、追加メールで返信した「初期MVPはKuroco + Cloudflareで軽量に開始し、拡張段階でFastAPIを追加する」方針を反映しました。</p>
         <div class="meta">
           <div><strong>担当</strong>高橋</div>
           <div><strong>対象</strong>AIニュース / SCS</div>
-          <div><strong>提出日</strong>2026/06/19</div>
-          <div><strong>結論</strong>Kuroco + 外部API</div>
+          <div><strong>本日</strong>2026/06/26 11:00</div>
+          <div><strong>結論</strong>Kuroco + Cloudflare</div>
         </div>
       </div>
       <aside class="hero-side">
         <h2>本日の回答</h2>
         <ol>
-          <li>無料は静的HTMLとメール配信まで</li>
-          <li>AI検索・PDF生成・診断は有料化</li>
-          <li>Kurocoは会員管理とCMSに集中</li>
-          <li>AI処理はFastAPIを外部ホスティング</li>
-          <li>使いすぎ防止は月間クォータで管理</li>
+          <li>初期MVPはKuroco + Cloudflareで開始</li>
+          <li>Kurocoは会員管理・CMS・出し分けを担当</li>
+          <li>Cloudflare Pagesでフロント表示</li>
+          <li>Workersで軽量APIとGemini/Search APIを実行</li>
+          <li>PDF生成などが重くなったらFastAPIを追加</li>
         </ol>
       </aside>
     </section>
 
     <section class="section executive-summary">
-      <h2>エグゼクティブサマリ: 前回宿題と回答</h2>
-      <p>前回MTGでの高橋担当の宿題は、大きく2つです。水野さんへの回答としては、以下の方針で整理しました。</p>
+      <h2>エグゼクティブサマリ: 前回宿題と本日の回答</h2>
+      <p>前回MTGでの高橋担当の宿題は、大きく2つです。追加メールで返信した内容を踏まえ、本日は「初期MVPはKuroco + Cloudflareで成立する範囲に絞る」方向で回答します。</p>
       <div class="answer-grid">
         <article class="answer-card">
           <h3><span class="badge blue">宿題1</span>Kurocoでどこまでやるか</h3>
           <div class="question">問い: Kuroco単独で有料アプリまで完結できるのか。フロント/バックエンドはどう分けるべきか。</div>
-          <div class="answer">回答: Kurocoは会員管理・CMS・無料/有料の出し分けに集中させ、Gemini API実行、Google Search API実行、PDF生成、利用回数制限は外部バックエンドで行う構成が現実的です。</div>
+          <div class="answer">回答: 初期MVPはKuroco + Cloudflareで軽量に開始する案が現実的です。Kurocoは会員管理・CMS・無料/有料の出し分け、Cloudflare Pagesはフロント表示、Cloudflare Workersは軽量API・Gemini/Search APIのサーバー側実行を担当します。</div>
           <ul>
             <li>Kuroco: ログイン、会員ランク、記事CMS、表示制御</li>
-            <li>FastAPI: AI検索、要約、PDF生成、月間クォータ管理</li>
-            <li>初期MVP: Kuroco + Resend + Railway上のFastAPI</li>
+            <li>Cloudflare Pages: フロント画面、静的ページ、会員向けUI</li>
+            <li>Cloudflare Workers: Gemini/Search API実行、簡易的な利用回数管理</li>
+            <li>FastAPI: PDF生成、重いバッチ処理、複雑なクォータ管理が必要になった段階で追加</li>
           </ul>
         </article>
         <article class="answer-card">
@@ -493,7 +494,26 @@
           </ul>
         </article>
       </div>
-      <div class="callout">水野さんへの一言回答: 「無料は静的、有料は動的AI機能。Kurocoは入口と会員制御、AI処理は外部バックエンド。課金は月間クォータ制で青天井を防ぎます。」</div>
+      <div class="callout">水野さんへの一言回答: 「初期MVPはKuroco + Cloudflareで軽量に始め、重い処理が出たらFastAPIを追加します。無料は静的、有料は動的AI機能。課金は月間クォータ制で青天井を防ぎます。」</div>
+    </section>
+
+    <section class="section">
+      <h2>本日11:00のアジェンダ</h2>
+      <table>
+        <thead>
+          <tr><th>No.</th><th>議題</th><th>確認したいこと</th><th>ゴール</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="num">1</td><td>前回宿題の確認</td><td>Kurocoでできる範囲、AI/API課金の制御、無料/有料/ワンショットの切り分け</td><td>前回スキップ分の認識合わせ</td></tr>
+          <tr><td class="num">2</td><td>MVP構成の再整理</td><td>当初のFastAPI前提案から、Kuroco + Cloudflare構成へ寄せられるか</td><td>初期MVPの技術方針を決める</td></tr>
+          <tr><td class="num">3</td><td>Kuroco + Cloudflareで成立する範囲</td><td>会員管理、記事CMS、無料/有料出し分け、Pages、Workers、Gemini/Search API、簡易利用回数管理</td><td>FastAPIなしで始める範囲を明確化</td></tr>
+          <tr><td class="num">4</td><td>FastAPIを追加するタイミング</td><td>PDF生成、重いバッチ処理、複雑な月間クォータ、SCS詳細診断レポート</td><td>拡張段階の判断基準を決める</td></tr>
+          <tr><td class="num">5</td><td>有料プランと課金制御</td><td>使い放題を避け、AI検索回数・PDF生成回数・診断回数を月間上限で管理する</td><td>青天井にならない料金設計の方向を確認</td></tr>
+          <tr><td class="num">6</td><td>SCS星3サービス案</td><td>無料チェック、詳細診断、PDFレポート、ワンショット支援への導線</td><td>最初の有料アプリ候補を確認</td></tr>
+          <tr><td class="num">7</td><td>次回までのタスク</td><td>MVP対象機能、Kuroco + Cloudflare実装可否、料金プラン案の再調整</td><td>担当と宿題を確定</td></tr>
+        </tbody>
+      </table>
+      <div class="callout">本日の決めどころ: 「初期MVPで何をやるか」を先に絞り、その範囲がKuroco + Cloudflareで成立するかを確認する。</div>
     </section>
 
     <section class="section">
@@ -511,11 +531,11 @@
         </article>
         <article class="mini-card">
           <span class="label amber">技術構成</span>
-          <h3>Kuroco + 外部アプリ</h3>
-          <p>Kurocoはログイン、会員ランク、記事CMS、表示制御を担当。AI処理、PDF生成、利用回数制限はFastAPI側で管理する。</p>
+          <h3>Kuroco + Cloudflare</h3>
+          <p>Kurocoはログイン、会員ランク、記事CMS、表示制御を担当。Cloudflare Pagesで表示し、Workersで軽量APIとサーバー側API実行を行う。</p>
         </article>
       </div>
-      <div class="callout">提案: 初期MVPは「Kuroco会員サイト + Resendメール + Railway上のFastAPI」で始める。Cloudflare Workersは軽量APIや将来の分散構成で検討。</div>
+      <div class="callout">提案: 初期MVPは「Kuroco会員サイト + Cloudflare Pages + Cloudflare Workers」で始める。PDF生成や重い診断処理が必要になった段階でFastAPIを追加する。</div>
     </section>
 
     <section class="section">
@@ -625,33 +645,34 @@
           <tr><th>管理対象</th><th>保存する値</th><th>実装場所</th><th>ユーザー表示</th></tr>
         </thead>
         <tbody>
-          <tr><td>AI検索</td><td>user_id, month, search_count</td><td>FastAPI + SQLite/Postgres</td><td>今月 12 / 20回</td></tr>
-          <tr><td>PDF生成</td><td>user_id, month, pdf_count</td><td>FastAPI + SQLite/Postgres</td><td>今月 1 / 1回</td></tr>
-          <tr><td>SCS診断</td><td>user_id, month, scs_report_count</td><td>FastAPI + SQLite/Postgres</td><td>今月 0 / 1回</td></tr>
-          <tr><td>短時間連打</td><td>user_id, endpoint, timestamp</td><td>FastAPI middleware</td><td>少し待って再実行</td></tr>
+          <tr><td>AI検索</td><td>user_id, month, search_count</td><td>Cloudflare Workers + KV/D1</td><td>今月 12 / 20回</td></tr>
+          <tr><td>PDF生成</td><td>user_id, month, pdf_count</td><td>拡張段階でFastAPI + DB</td><td>今月 1 / 1回</td></tr>
+          <tr><td>SCS診断</td><td>user_id, month, scs_report_count</td><td>簡易版はWorkers、詳細PDFはFastAPI</td><td>今月 0 / 1回</td></tr>
+          <tr><td>短時間連打</td><td>user_id, endpoint, timestamp</td><td>Cloudflare Workers rate limit</td><td>少し待って再実行</td></tr>
         </tbody>
       </table>
     </section>
 
     <section class="section">
-      <h2>宿題2: Kurocoでできること / 外部が必要なこと</h2>
+      <h2>宿題2: Kuroco + Cloudflareでできること / FastAPI追加が必要なこと</h2>
       <table>
         <thead>
-          <tr><th>機能</th><th>Kuroco単独</th><th>外部アプリ必要性</th><th>判断</th></tr>
+          <tr><th>機能</th><th>Kuroco</th><th>Cloudflare</th><th>FastAPI追加</th><th>判断</th></tr>
         </thead>
         <tbody>
-          <tr><td>会員登録・ログイン</td><td>可能</td><td>低</td><td>Kuroco担当</td></tr>
-          <tr><td>無料/有料コンテンツの出し分け</td><td>可能</td><td>低</td><td>Kuroco担当</td></tr>
-          <tr><td>記事CMS・ニュースページ管理</td><td>可能</td><td>低</td><td>Kuroco担当</td></tr>
-          <tr><td>静的HTMLの表示</td><td>可能</td><td>低</td><td>Kurocoまたは静的ホスティング</td></tr>
-          <tr><td>Gemini API実行</td><td>非推奨</td><td>高</td><td>FastAPI担当。APIキーをブラウザに出さない</td></tr>
-          <tr><td>Google Search API実行</td><td>非推奨</td><td>高</td><td>FastAPI担当。検索回数を記録</td></tr>
-          <tr><td>PDF生成</td><td>難しい</td><td>高</td><td>FastAPI担当。既存AiNEWS機能を活用</td></tr>
-          <tr><td>利用回数制限</td><td>難しい</td><td>高</td><td>FastAPI + DB担当</td></tr>
-          <tr><td>メール配信</td><td>限定的</td><td>中</td><td>Resend担当。Kurocoの会員情報と連携</td></tr>
+          <tr><td>会員登録・ログイン</td><td>可能</td><td>不要</td><td>不要</td><td>Kuroco担当</td></tr>
+          <tr><td>無料/有料コンテンツの出し分け</td><td>可能</td><td>補助可能</td><td>不要</td><td>Kuroco担当</td></tr>
+          <tr><td>記事CMS・ニュースページ管理</td><td>可能</td><td>表示を担当</td><td>不要</td><td>Kuroco + Pages</td></tr>
+          <tr><td>フロント画面表示</td><td>可能</td><td>Pagesが得意</td><td>不要</td><td>Cloudflare Pages推奨</td></tr>
+          <tr><td>Gemini API実行</td><td>非推奨</td><td>Workersで可能</td><td>原則不要</td><td>APIキーをWorkers側に保持</td></tr>
+          <tr><td>Google Search API実行</td><td>非推奨</td><td>Workersで可能</td><td>原則不要</td><td>検索回数をWorkers側で記録</td></tr>
+          <tr><td>簡易利用回数制限</td><td>難しい</td><td>KV/D1で可能</td><td>不要</td><td>初期MVPはWorkersで対応</td></tr>
+          <tr><td>PDF生成</td><td>難しい</td><td>軽量PDFなら検討、重いPDFは不向き</td><td>必要</td><td>拡張段階でFastAPI</td></tr>
+          <tr><td>複雑な月間クォータ管理</td><td>難しい</td><td>簡易版は可能</td><td>必要になる可能性あり</td><td>段階的に追加</td></tr>
+          <tr><td>メール配信</td><td>限定的</td><td>Webhook/API連携可能</td><td>不要</td><td>Resend連携</td></tr>
         </tbody>
       </table>
-      <div class="callout risk">結論: Kurocoのコンテンツ内にAI APIキーを埋め込む構成は避けます。有料AI機能は必ずサーバー側で実行し、会員権限と利用回数を確認してからAPIを呼びます。</div>
+      <div class="callout risk">結論: Kurocoのコンテンツ内にAI APIキーを埋め込む構成は避けます。初期MVPではWorkersでサーバー側実行し、重い処理が出てきた段階でFastAPIを追加します。</div>
     </section>
 
     <section class="section">
@@ -666,16 +687,16 @@
           <p>ログイン、会員ランク、無料/有料表示を制御。</p>
         </div>
         <div class="flow-step">
-          <strong>3. フロントHTML</strong>
-          <p>検索フォーム、期間指定、PDFボタンを表示。</p>
+          <strong>3. Cloudflare Pages</strong>
+          <p>検索フォーム、期間指定、会員向けUIを表示。</p>
         </div>
         <div class="flow-step">
-          <strong>4. FastAPI</strong>
-          <p>会員権限、月間クォータ、API実行、PDF生成を担当。</p>
+          <strong>4. Workers</strong>
+          <p>軽量API、APIキー保護、簡易クォータ、Gemini/Search実行。</p>
         </div>
         <div class="flow-step">
-          <strong>5. 外部API</strong>
-          <p>Gemini、Google Search、Resendをサーバー側から呼び出す。</p>
+          <strong>5. 拡張バックエンド</strong>
+          <p>PDF生成や重い診断が必要になったらFastAPIを追加。</p>
         </div>
       </div>
       <table>
@@ -683,8 +704,8 @@
           <tr><th>候補</th><th>向いている用途</th><th>メリット</th><th>懸念</th><th>今回の判断</th></tr>
         </thead>
         <tbody>
-          <tr><td>Railway</td><td>FastAPI、PDF生成、DB付きアプリ</td><td>Python/FastAPIをそのまま置きやすい。AiNEWS既存構成と相性が良い</td><td>利用量で費用が変動する</td><td>初期MVPの本命</td></tr>
-          <tr><td>Cloudflare Workers / Pages</td><td>軽量API、認証中継、静的サイト</td><td>低額でスケールしやすい。Workers Paidは$5/月から</td><td>Python PDF生成や重い処理には向きにくい</td><td>将来の軽量化候補</td></tr>
+          <tr><td>Cloudflare Workers / Pages</td><td>軽量API、認証中継、静的サイト、Gemini/Search API実行</td><td>低額でスケールしやすい。APIキーをフロントに出さずに済む</td><td>Python PDF生成や重い処理には向きにくい</td><td>初期MVPの本命</td></tr>
+          <tr><td>Railway</td><td>FastAPI、PDF生成、DB付きアプリ</td><td>Python/FastAPIをそのまま置きやすい。AiNEWS既存構成と相性が良い</td><td>利用量で費用が変動する</td><td>拡張段階の候補</td></tr>
           <tr><td>Render</td><td>FastAPI、Docker、常時稼働Webサービス</td><td>構成が分かりやすい。Starter $7/月から</td><td>無料枠は本番向きではない</td><td>Railway代替</td></tr>
           <tr><td>Kuroco単独</td><td>CMS、会員ページ、静的HTML</td><td>既存検証済み。日本語運用しやすい</td><td>AI APIキー管理、PDF生成、利用制限には弱い</td><td>会員・CMSに集中</td></tr>
         </tbody>
@@ -707,24 +728,24 @@
     </section>
 
     <section class="section">
-      <h2>明日のMTGでの説明台本</h2>
+      <h2>本日のMTGでの説明台本</h2>
       <div class="grid-2">
         <article class="mini-card">
           <span class="label">冒頭</span>
           <h3>30秒サマリ</h3>
-          <p>「無料は静的コンテンツとメールまでにし、AI検索やPDF生成のようにAPI課金が発生するものは有料に切ります。Kurocoは会員管理とCMSに集中させ、AI処理は外部のFastAPIで安全に実行する構成が現実的です。」</p>
+          <p>「前回はFastAPI前提で整理していましたが、MVPを絞るなら、まずはKuroco + Cloudflareで始めるのが現実的だと思います。会員管理とCMSはKuroco、画面表示はCloudflare Pages、軽量APIとGemini/Search APIの実行はCloudflare Workersに寄せます。」</p>
         </article>
         <article class="mini-card">
           <span class="label blue">提案</span>
           <h3>次に決めたいこと</h3>
           <ul>
-            <li>最初に出す有料プランはライト/スタンダードの2段階でよいか</li>
-            <li>初期MVPのホスティングをRailwayで進めてよいか</li>
+            <li>初期MVPをKuroco + Cloudflare構成で進めてよいか</li>
+            <li>FastAPIなしで始める機能範囲をどこまでにするか</li>
             <li>SCS診断を最初の有料アプリにするか</li>
           </ul>
         </article>
       </div>
-      <div class="callout">次アクション: まずは「Kurocoログイン済み有料会員だけがFastAPIのAI検索を呼べる」小さなプロトタイプを作り、月間クォータ管理まで検証します。</div>
+      <div class="callout">次アクション: まずは「Kurocoログイン済み有料会員だけがCloudflare Workers経由でAI検索を呼べる」小さなプロトタイプを作り、簡易クォータ管理まで検証します。</div>
     </section>
 
     <section class="section">
@@ -740,7 +761,7 @@
       </ul>
     </section>
 
-    <p class="footer">作成: 高橋宿題回答案 / 2026年6月19日MTG向け</p>
+    <p class="footer">作成: 高橋宿題回答案 / 2026年6月26日 11:00 MTG向け</p>
   </main>
 </body>
 </html>
